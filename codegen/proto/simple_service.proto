@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package examples.simple_service;
+
+service SimpleService {
+    rpc GetSomeValue(Request) returns (Response);
+}
+
+message Request {
+    int32 someValue = 1;
+}
+
+message Response {
+    int32 someValue = 1;
+}
+  

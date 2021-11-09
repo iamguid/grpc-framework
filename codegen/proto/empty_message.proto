@@ -1,0 +1,5 @@
+syntax = "proto3";
+
+package examples.empty_message;
+
+message NoMessage {}
