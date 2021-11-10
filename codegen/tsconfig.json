@@ -17,12 +17,15 @@
         "outDir": "lib",
         "noEmitOnError": true,
         "downlevelIteration": true,
+        "rootDir": "src",
         "types": [
+            "chai",
+            "mocha",
             "node",
             "google-protobuf"
         ],
         "lib": [
-            "es2015"
+            "es2015",
         ]
     },
     "include": [

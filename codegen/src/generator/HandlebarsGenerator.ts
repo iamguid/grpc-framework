@@ -14,7 +14,7 @@ export class HandlebarsGenerator<TContext> implements IGenerator<IHandlebarsGene
   public generateFile(generatorInput: IHandlebarsGeneratorInput<TContext>) {
     const templateStr = fs.readFileSync(generatorInput.handlebarsTeamplateFilePath).toString('utf8')
     const teamplate = Handlebars.compile(templateStr, { noEscape: true })
-    const result = teamplate(generatorInput.generatorCtx);
+    const result = teamplate(generatorInput.generatorCtx, { allowProtoMethodsByDefault: true, allowProtoPropertiesByDefault: true });
 
     this.generated.push({
       fileName: generatorInput.resultFileName,

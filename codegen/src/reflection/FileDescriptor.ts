@@ -1,5 +1,5 @@
 import { Message } from "google-protobuf";
-import { FileDescriptorProto } from "google-protobuf/google/protobuf/descriptor_pb";
+import { FieldDescriptorProto, FileDescriptorProto } from "google-protobuf/google/protobuf/descriptor_pb";
 import { buildNamespace } from "../utils";
 import { EnumDescriptor } from "./EnumDescriptor";
 import { IDescriptor } from "./IDescriptor";
@@ -21,12 +21,44 @@ export class FileDescriptor implements IDescriptor<FileDescriptorProto> {
      */
     public readonly proto: FileDescriptorProto;
 
-    private  readonly registry: ReflectionRegistry;
+    /**
+     * Contains reflection registry.
+     */
+    public readonly registry: ReflectionRegistry;
 
-    constructor(proto: FileDescriptorProto, registry: ReflectionRegistry) {
+    /**
+     * Contains all services descriptors that defined in .proto file.
+     */
+    public readonly services: ServiceDescriptor[];
+
+    /**
+     * Contains all messages descriptors that defined in .proto file.
+     */
+    public readonly messages: MessageDescriptor[];
+
+    /**
+     * Contains all enums descriptors that defined in .proto file.
+     */
+    public readonly enums: EnumDescriptor[];
+
+    constructor(proto: FileDescriptorProto, dependencies: FileDescriptor[]) {
         this.namespace = proto.getPackage()!;
         this.proto = proto;
-        this.registry = registry;
+        this.registry = new ReflectionRegistry(dependencies);
+
+        this.services = this.proto.getServiceList().map((service, index) => {
+            return new ServiceDescriptor(this, this.namespace, index, service);
+        })
+
+        this.messages = this.proto.getMessageTypeList().map((message, index) => {
+            return new MessageDescriptor(this, this.namespace, index, message);
+        });
+
+        this.enums = this.proto.getEnumTypeList().map((enm, index) => {
+            return new EnumDescriptor(this, this.namespace, index, enm);
+        });
+
+        this.registry.addEntry(this);
     }
 
     /**
@@ -41,47 +73,5 @@ export class FileDescriptor implements IDescriptor<FileDescriptorProto> {
      */
     public get fullpath() {
         return buildNamespace(this.namespace, this.name);
-    }
-
-    /**
-     * Returns all services descriptors that defined in .proto file 
-     */
-    public get services() {
-        const services: ServiceDescriptor[] = [];
-
-        this.proto.getServiceList().forEach((service, index) => {
-            const serviceNamespace = buildNamespace(this.namespace, service.getName());
-            services.push(this.registry.getService(serviceNamespace));
-        });
-
-        return services;
-    }
-
-    /**
-     * Returns all messages descriptors that defined in .proto file 
-     */
-    public get messages() {
-        const messages: MessageDescriptor[] = [];
-
-        this.proto.getMessageTypeList().forEach(service => {
-            const serviceNamespace = buildNamespace(this.namespace, service.getName());
-            messages.push(this.registry.getMessage(serviceNamespace));
-        });
-
-        return messages;
-    }
-
-    /**
-     * Returns all enums descriptors that defined in .proto file 
-     */
-    public get enums() {
-        const enums: EnumDescriptor[] = [];
-
-        this.proto.getEnumTypeList().forEach(enm => {
-            const serviceNamespace = buildNamespace(this.namespace, enm.getName());
-            enums.push(this.registry.getEnum(serviceNamespace));
-        });
-
-        return enums;
     }
 }

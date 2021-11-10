@@ -1,6 +1,6 @@
 import { CodeGeneratorRequest, CodeGeneratorResponse } from 'google-protobuf/google/protobuf/compiler/plugin_pb';
-import { ClientsFilesGenerator } from './generator/ClientsFilesGenerator';
-import { ReflectionRegistry } from './reflection/ReflectionRegistry';
+import { ClientsFilesGenerator } from './generator//ClientFilesGenerator/ClientsFilesGenerator';
+import { resolveDependencies } from './resolveDependencies';
 import { withAllStdIn } from './utils';
 
 /**
@@ -19,16 +19,10 @@ withAllStdIn((inputBuff: Buffer) => {
 
         const codeGenRequest = CodeGeneratorRequest.deserializeBinary(typedInputBuff);
         const codeGenResponse = new CodeGeneratorResponse();
+        
+        const filesDescriptors = resolveDependencies(codeGenRequest.getProtoFileList());
 
-        const reflectionRegistry = new ReflectionRegistry();
-
-        codeGenRequest.getProtoFileList().forEach(protoFileDescriptor => {
-            reflectionRegistry.importFile(protoFileDescriptor);
-        });
-
-        console.warn(reflectionRegistry);
-
-        const clientsGenerator = new ClientsFilesGenerator(codeGenRequest.getFileToGenerateList(), reflectionRegistry);
+        const clientsGenerator = new ClientsFilesGenerator(Array.from(filesDescriptors.values()));
         clientsGenerator.generateClients();
 
         for (const output of clientsGenerator.generated) {
