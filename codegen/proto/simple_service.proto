@@ -13,4 +13,3 @@ message Request {
 message Response {
     int32 someValue = 1;
 }
-  

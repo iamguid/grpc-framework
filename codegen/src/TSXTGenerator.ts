@@ -11,7 +11,6 @@ export class TSXTGenerator<TContext> implements IGenerator<ITSXTGeneratorInput<T
 
   public generateFile(generatorInput: ITSXTGeneratorInput<TContext>) {
     const result = generatorInput.template(generatorInput.generatorCtx);
-    console.warn("result", generatorInput.template)
 
     this.generated.push({
       fileName: generatorInput.resultFileName,

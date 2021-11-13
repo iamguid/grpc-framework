@@ -122,7 +122,7 @@ mkdir -p ${output_dir}
 
 # build protoc-gen-frontend plugin
 cd ${PROTOGEN_ROOT}
-npm i && npm run build
+npm run build
 
 # Generates messages, enums, models and client stubs
 ${PROTOC_LIB} -I=$GOOGLEAPIS_DIR -I=$proto_path "${file_names[@]}" \
