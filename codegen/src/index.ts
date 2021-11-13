@@ -1,5 +1,5 @@
 import { CodeGeneratorRequest, CodeGeneratorResponse } from 'google-protobuf/google/protobuf/compiler/plugin_pb';
-import { ClientsFilesGenerator } from './generator//ClientFilesGenerator/ClientsFilesGenerator';
+import { ClientsFilesGenerator } from './ClientsFilesGenerator';
 import { resolveDependencies } from './resolveDependencies';
 import { withAllStdIn } from './utils';
 
@@ -22,7 +22,7 @@ withAllStdIn((inputBuff: Buffer) => {
         
         const filesDescriptors = resolveDependencies(codeGenRequest.getProtoFileList());
 
-        const clientsGenerator = new ClientsFilesGenerator(Array.from(filesDescriptors.values()));
+        const clientsGenerator = new ClientsFilesGenerator.ClientsFilesGenerator(Array.from(filesDescriptors.values()));
         clientsGenerator.generateClients();
 
         for (const output of clientsGenerator.generated) {

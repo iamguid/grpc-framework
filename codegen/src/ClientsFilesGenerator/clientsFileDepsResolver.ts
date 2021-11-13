@@ -1,7 +1,7 @@
-import { FileDescriptor } from "../../reflection/FileDescriptor";
-import { WellKnownTypesFilesMap } from "../../WellKnownTypes/WellKnownTypesFilesMap";
-import { getPathToRoot, replaceProtoSuffix, filePathToPseudoNamespace } from "../../utils";
-import { MessageDescriptor } from "../../reflection/MessageDescriptor";
+import { FileDescriptor } from "../reflection/FileDescriptor";
+import { WellKnownTypesFilesMap } from "../WellKnownTypes/WellKnownTypesFilesMap";
+import { getPathToRoot, replaceProtoSuffix, filePathToPseudoNamespace } from "../utils";
+import { MessageDescriptor } from "../reflection/MessageDescriptor";
 
 export interface Import {
     name: string;

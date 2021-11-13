@@ -2,7 +2,6 @@ import { Message } from 'google-protobuf';
 import { buildNamespace } from '../utils';
 import { FileDescriptor } from './FileDescriptor';
 import { IDescriptor } from './IDescriptor';
-import { ReflectionRegistry } from './ReflectionRegistry';
 
 export abstract class BaseDescriptor<TProtoDescriptor extends Message> implements IDescriptor<TProtoDescriptor> {
 
