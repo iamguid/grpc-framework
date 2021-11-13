@@ -5,7 +5,9 @@
 // package: examples.empty_service
 // file: empty_service.proto
 
-import * as grpcWeb from "grpc-web",import * jspb from "google-protobuf"
+import * as grpcWeb from "grpc-web"
+import * jspb from "google-protobuf"
+
 
 export interface IEmptyServiceClient {
 }

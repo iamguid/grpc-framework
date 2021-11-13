@@ -24,8 +24,6 @@ export const clientsFileDepsResolver = (fileDescriptor: FileDescriptor) => {
     const pathToRoot = getPathToRoot(fileDescriptor.name);
     const dependenciesList = getDepsList(fileDescriptor)
 
-    console.warn(dependenciesList);
-
     for (const path of dependenciesList) {
         const entry = fileDescriptor.registry.getEntry(path);
         const filePathWithoutExtension = replaceProtoSuffix(entry.name, 'dto');

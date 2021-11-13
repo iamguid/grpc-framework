@@ -6,10 +6,10 @@ export default ({ imports }: { imports: Import[] }, children: string[]) => (
         {children}
         <ln />
 
-        {imports
-        .map((imprt) => (
-            <templ>{`import * ${imprt.name} from "${imprt.path}";`}</templ>
-        ))
-        .join("")}
+        {imports.map((imprt) => (
+            <templ>
+                {`import * ${imprt.name} from "${imprt.path}";`}
+            </templ>
+        )).join("")}
     </templ>
 );

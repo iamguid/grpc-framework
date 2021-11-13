@@ -8,8 +8,10 @@ export default (ctx: ClientsFilesGenerator.Context) => (
     <HeaderTempl packageName={ctx.fileDescriptor.proto.getPackage()} fileName={ctx.fileDescriptor.name}/>
     <ln/>
     <ImportsTempl imports={ctx.imports}>
-      {`import * as grpcWeb from "grpc-web"`}
-      {`import * jspb from "google-protobuf"`}
+      <templ>
+        {`import * as grpcWeb from "grpc-web"`}
+        {`import * jspb from "google-protobuf"`}
+      </templ>
     </ImportsTempl>
     <ln/>
     <ClientsTempl clients={ctx.clients}/>
@@ -36,11 +38,11 @@ const ClientInterfaceTempl = ({ client }: { client: ClientsFilesGenerator.Servic
       {client.methods.map(client => (
         client.isServerStreaming ? (
           <templ>
-            {`${client.methodName}}: (request: ${client.inputType}, metadata: grpcWeb.Metadata) => grpcWeb.ClientReadableStream<${client.outputType}>;`}
+            {`${client.methodName}: (request: ${client.inputType}, metadata: grpcWeb.Metadata) => grpcWeb.ClientReadableStream<${client.outputType}>;`}
           </templ>
         ) : (
           <templ>
-            {`${client.methodName}}: (request: ${client.inputType}, metadata: grpcWeb.Metadata) => Promise<${client.outputType}>;`}
+            {`${client.methodName}: (request: ${client.inputType}, metadata: grpcWeb.Metadata) => Promise<${client.outputType}>;`}
           </templ>
         )
       )).join("")}
@@ -55,7 +57,7 @@ const ClientClassTempl = ({ client }: { client: ClientsFilesGenerator.ServiceCli
     <indent>
       {client.methods.map(client => (
         <templ>
-          {`public ${client.methodName}}(request: ${client.inputType}, metadata: grpcWeb.Metadata) {`}
+          {`public ${client.methodName}(request: ${client.inputType}, metadata: grpcWeb.Metadata) {`}
           <indent>
             {client.isServerStreaming ? (
               <templ>

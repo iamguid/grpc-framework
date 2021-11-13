@@ -18,7 +18,7 @@ var _default = ctx => "" + ("" + (0, _header.default)({
   "fileName": ctx.fileDescriptor.name
 }, [])) + ("" + "" + "\n") + ("" + (0, _imports.default)({
   "imports": ctx.imports
-}, [`import * as grpcWeb from "grpc-web"`, `import * jspb from "google-protobuf"`])) + ("" + "" + "\n") + ("" + ClientsTempl({
+}, ["" + ("" + `import * as grpcWeb from "grpc-web"` + "\n") + ("" + `import * jspb from "google-protobuf"` + "\n")])) + ("" + "" + "\n") + ("" + ClientsTempl({
   "clients": ctx.clients
 }, []));
 
@@ -34,8 +34,8 @@ const ClientsTempl = ({
 
 const ClientInterfaceTempl = ({
   client
-}) => "" + ("" + `export interface ${client.interfaceClassName} {` + "\n") + ("" + ("" + ("" + client.methods.map(client => client.isServerStreaming ? "" + ("\xA0\xA0\xA0\xA0" + `${client.methodName}}: (request: ${client.inputType}, metadata: grpcWeb.Metadata) => grpcWeb.ClientReadableStream<${client.outputType}>;` + "\n") : "" + ("\xA0\xA0\xA0\xA0" + `${client.methodName}}: (request: ${client.inputType}, metadata: grpcWeb.Metadata) => Promise<${client.outputType}>;` + "\n")).join("")))) + ("" + `}` + "\n");
+}) => "" + ("" + `export interface ${client.interfaceClassName} {` + "\n") + ("" + ("" + ("" + client.methods.map(client => client.isServerStreaming ? "" + ("\xA0\xA0\xA0\xA0" + `${client.methodName}: (request: ${client.inputType}, metadata: grpcWeb.Metadata) => grpcWeb.ClientReadableStream<${client.outputType}>;` + "\n") : "" + ("\xA0\xA0\xA0\xA0" + `${client.methodName}: (request: ${client.inputType}, metadata: grpcWeb.Metadata) => Promise<${client.outputType}>;` + "\n")).join("")))) + ("" + `}` + "\n");
 
 const ClientClassTempl = ({
   client
-}) => "" + ("" + `export class ${client.clientClassName} extends ${client.interfaceClassName} {` + "\n") + ("" + ("" + ("" + client.methods.map(client => "" + ("\xA0\xA0\xA0\xA0" + `public ${client.methodName}}(request: ${client.inputType}, metadata: grpcWeb.Metadata) {` + "\n") + ("" + ("" + ("" + (client.isServerStreaming ? "" + ("\xA0\xA0\xA0\xA0\xA0\xA0\xA0\xA0" + `retrun void;` + "\n") : "" + ("\xA0\xA0\xA0\xA0\xA0\xA0\xA0\xA0" + `retrun void;` + "\n"))))) + ("\xA0\xA0\xA0\xA0" + `}` + "\n")).join("")))) + ("" + `}` + "\n");
+}) => "" + ("" + `export class ${client.clientClassName} extends ${client.interfaceClassName} {` + "\n") + ("" + ("" + ("" + client.methods.map(client => "" + ("\xA0\xA0\xA0\xA0" + `public ${client.methodName}(request: ${client.inputType}, metadata: grpcWeb.Metadata) {` + "\n") + ("" + ("" + ("" + (client.isServerStreaming ? "" + ("\xA0\xA0\xA0\xA0\xA0\xA0\xA0\xA0" + `retrun void;` + "\n") : "" + ("\xA0\xA0\xA0\xA0\xA0\xA0\xA0\xA0" + `retrun void;` + "\n"))))) + ("\xA0\xA0\xA0\xA0" + `}` + "\n")).join("")))) + ("" + `}` + "\n");
