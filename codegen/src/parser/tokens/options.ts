@@ -1,5 +1,4 @@
-import { isPresent } from '@whisklabs/typeguards';
-
+import { isPresent } from '../typeguards';
 import { next, setComment, writeComment } from '../comment';
 import { Thrower } from '../thrower';
 import { Option, Options } from '../types';

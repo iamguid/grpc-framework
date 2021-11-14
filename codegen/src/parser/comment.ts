@@ -1,4 +1,4 @@
-import { isPresent, isText } from '@whisklabs/typeguards';
+import { isPresent, isText } from './typeguards';
 
 import { cut } from './utils';
 

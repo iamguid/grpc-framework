@@ -1,5 +1,4 @@
-import { isObject } from '@whisklabs/typeguards';
-
+import { isObject } from '../typeguards';
 import { next, writeComment } from '../comment';
 import { Thrower } from '../thrower';
 import { Message } from '../types';

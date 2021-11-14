@@ -1,4 +1,4 @@
-import { isPresent, isString, isText } from '@whisklabs/typeguards';
+import { isPresent, isString, isText } from './typeguards';
 
 import { Thrower } from './thrower';
 import { Option, Options } from './types';
