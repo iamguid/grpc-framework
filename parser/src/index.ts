@@ -4,7 +4,7 @@ import * as path from "path";
 import { CharStreams, CommonTokenStream } from 'antlr4ts';
 import { AbstractParseTreeVisitor } from 'antlr4ts/tree/AbstractParseTreeVisitor';
 
-import { EnumDefContext, EnumFieldContext, FieldContext, ImportStatementContext, MessageDefContext, Protobuf3Parser, ProtoContext, RpcContext, ServiceDefContext, ServiceElementContext } from './generated/Protobuf3Parser'
+import { EnumDefContext, EnumFieldContext, FieldContext, ImportStatementContext, MapFieldContext, MessageDefContext, MessageElementContext, OneofContext, OneofFieldContext, Protobuf3Parser, ProtoContext, RpcContext, ServiceDefContext, ServiceElementContext } from './generated/Protobuf3Parser'
 import { Protobuf3Visitor } from './generated/Protobuf3Visitor';
 import { Protobuf3Lexer } from './generated/Protobuf3Lexer'
 import { FileDescriptor, FileImport } from './reflection/FileDescriptor';
@@ -15,7 +15,7 @@ import { MessageDescriptor } from './reflection/MessageDescriptor';
 import { EnumDescriptor } from './reflection/EnumDescriptor';
 import { trimChar } from './utils';
 import { EnumFieldDescriptor } from "./reflection/EnumFieldDescriptor";
-import { FieldDescriptor } from "./reflection/FieldDescriptor";
+import { FieldDescriptor, MapField } from "./reflection/FieldDescriptor";
 
 const filePath = path.resolve(__dirname, "../src/tests/proto/example.proto")
 const content = fs.readFileSync(filePath).toString();
@@ -137,8 +137,32 @@ class Visitor extends AbstractParseTreeVisitor<IDescriptor> implements Protobuf3
             .map((messageElement, index) => this.visitEnumDef(messageElement.enumDef()!, index));
 
         const fields = ctx.messageBody().messageElement()
-            .filter(messageElement => Boolean(messageElement.field()))
-            .map(messageElement => this.visit)
+            .filter(messageElement => {
+                return Boolean(messageElement.field()) 
+                    || Boolean(messageElement.oneof()) 
+                    || Boolean(messageElement.mapField())
+            })
+            .reduce((current: FieldDescriptor[], messageElement: MessageElementContext, index) => {
+                if (Boolean(messageElement.field())) {
+                    current.push(this.visitField(messageElement.field()!, index));
+                }
+
+                if (Boolean(messageElement.mapField())) {
+                    current.push(this.visitMapField(messageElement.mapField()!, index));
+                }
+
+                if (Boolean(messageElement.oneof())) {
+                    const oneof = messageElement.oneof()!;
+                    const oneofName = oneof.oneofName().text;
+                    const fields = oneof.oneofField();
+
+                    fields.forEach((field, oneofIndex) => {
+                        current.push(this.visitOneofField(field, index + oneofIndex, oneofName)) 
+                    });
+                }
+
+                return current;
+            }, [])
 
         this.namespace.pop();
 
@@ -147,20 +171,62 @@ class Visitor extends AbstractParseTreeVisitor<IDescriptor> implements Protobuf3
             name: messageName,
             namespace: this.namespace.join('.'),
             fileDescriptor: this.fileDescriptor,
+            fields,
             messages: nestedMessages,
             enums: nestedEnums
         });
     }
 
-    visitField(ctx: FieldContext, index = 0) {
+    visitField(ctx: FieldContext, index = 0): FieldDescriptor {
         const fieldName = ctx.fieldName().text;
+        const filedType = ctx.type_().text;
+        const fieldNumber = Number.parseInt(ctx.fieldNumber().text, 10);
+        const isRepeated = Boolean(ctx.REPEATED()?.text);
 
         return new FieldDescriptor({
             index,
             name: fieldName,
             namespace: this.namespace.join('.'),
             fileDescriptor: this.fileDescriptor,
-        })
+            type: filedType,
+            repeated: isRepeated,
+            fieldNumber 
+        });
+    }
+
+    visitMapField(ctx: MapFieldContext, index = 0): FieldDescriptor {
+        const fieldName = ctx.mapName().text;
+        const fieldNumber = Number.parseInt(ctx.fieldNumber().text, 10);
+        const keyType = ctx.keyType().text;
+        const valueType = ctx.type_().text;
+        const mapField: MapField = { keyType, valueType }
+
+        return new FieldDescriptor({
+            index,
+            name: fieldName,
+            namespace: this.namespace.join('.'),
+            fileDescriptor: this.fileDescriptor,
+            type: "",
+            repeated: false,
+            fieldNumber,
+            map: mapField
+        });
+    }
+
+    visitOneofField(ctx: OneofFieldContext, index = 0, oneofName = ''): FieldDescriptor {
+        const fieldName = ctx.fieldName().text;
+        const filedType = ctx.type_().text;
+        const fieldNumber = Number.parseInt(ctx.fieldNumber().text, 10);
+
+        return new FieldDescriptor({
+            index,
+            name: fieldName,
+            namespace: this.namespace.join('.'),
+            fileDescriptor: this.fileDescriptor,
+            type: filedType,
+            repeated: false,
+            fieldNumber 
+        });
     }
 
     visitEnumDef(ctx: EnumDefContext, index = 0): EnumDescriptor {

@@ -21,16 +21,19 @@ export class MessageDescriptor extends BaseDescriptor {
     public readonly fields: FieldDescriptor[] = [];
 
     constructor(props: IBaseDescriptorProps & {
+        fields: FieldDescriptor[],
         messages: MessageDescriptor[],
         enums: EnumDescriptor[]
     }) {
         super(props);
         this.messages = props.messages;
         this.enums = props.enums;
+        this.fields = props.fields;
     }
 
     public toObject(): any {
         return Object.assign(super.toObject(), {
+            fields: this.fields.map(field => field.toObject()),
             messages: this.messages.map(message => message.toObject()),
             enums: this.enums.map(enm => enm.toObject()),
         })
