@@ -233,11 +233,16 @@ class Visitor extends AbstractParseTreeVisitor<IDescriptor | Option> implements 
 
         this.namespace.pop();
 
+        const options = ctx.messageBody().messageElement()
+            .filter(messageElement => Boolean(messageElement.optionStatement()))
+            .map(messageElement => extractOptions(messageElement.optionStatement()!))
+
         return new MessageDescriptor({
             index,
             name: messageName,
             namespace: this.namespace.join('.'),
             fileDescriptor: this.fileDescriptor,
+            options,
             fields,
             messages: nestedMessages,
             enums: nestedEnums
