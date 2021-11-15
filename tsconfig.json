@@ -1,8 +1,6 @@
 {
     "compilerOptions": {
-        "jsx": "preserve",
         "alwaysStrict": true,
-        "allowJs": true,
         "sourceMap": true,
         "declaration": true,
         "declarationDir": "lib",

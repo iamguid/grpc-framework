@@ -1,0 +1,8 @@
+{
+  "name": "grpc-framework",
+  "version": "1.0.0",
+  "description": "GRPC web framework",
+  "main": "index.js",
+  "author": "Vladislav Lebedev <iam.guid@gmail.com>",
+  "license": "MIT"
+}
