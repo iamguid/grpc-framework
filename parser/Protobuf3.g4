@@ -221,12 +221,12 @@ rpc
 // lexical
 
 constant
-  : fullIdent
-  | (MINUS | PLUS )? intLit
+  : (MINUS | PLUS )? intLit
   | ( MINUS | PLUS )? floatLit
   | strLit
   | boolLit
   | blockLit
+  | fullIdent
   ;
 
 // not specified in specification but used in tests

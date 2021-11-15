@@ -2,6 +2,7 @@ import { buildNamespace } from "../utils";
 import { EnumDescriptor } from "./EnumDescriptor";
 import { IDescriptor } from "./IDescriptor";
 import { MessageDescriptor } from "./MessageDescriptor";
+import { Options } from "./Options";
 import { ServiceDescriptor } from "./ServiceDescriptor";
 
 export interface FileImport {
@@ -27,6 +28,11 @@ export class FileDescriptor implements IDescriptor {
      * Does not include name of message
      */
     public namespace: string;
+
+    /**
+     * Contains all options that defined in .proto file.
+     */
+    public readonly options: Options[] = [];
 
     /**
      * Contains all imports descriptors that defined in .proto file.
@@ -60,6 +66,7 @@ export class FileDescriptor implements IDescriptor {
             package: this.package,
             name: this.name,
             namespace: this.namespace,
+            options: this.options,
             imports: this.imports,
             services: this.services.map(service => service.toObject()),
             messages: this.messages.map(message => message.toObject()),

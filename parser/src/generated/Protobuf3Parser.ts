@@ -1886,20 +1886,40 @@ export class Protobuf3Parser extends Parser {
 			case 1:
 				this.enterOuterAlt(_localctx, 1);
 				{
-				this.state = 383;
-				this.fullIdent();
+				this.state = 384;
+				this._errHandler.sync(this);
+				_la = this._input.LA(1);
+				if (_la === Protobuf3Parser.PLUS || _la === Protobuf3Parser.MINUS) {
+					{
+					this.state = 383;
+					_la = this._input.LA(1);
+					if (!(_la === Protobuf3Parser.PLUS || _la === Protobuf3Parser.MINUS)) {
+					this._errHandler.recoverInline(this);
+					} else {
+						if (this._input.LA(1) === Token.EOF) {
+							this.matchedEOF = true;
+						}
+
+						this._errHandler.reportMatch(this);
+						this.consume();
+					}
+					}
+				}
+
+				this.state = 386;
+				this.intLit();
 				}
 				break;
 
 			case 2:
 				this.enterOuterAlt(_localctx, 2);
 				{
-				this.state = 385;
+				this.state = 388;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 				if (_la === Protobuf3Parser.PLUS || _la === Protobuf3Parser.MINUS) {
 					{
-					this.state = 384;
+					this.state = 387;
 					_la = this._input.LA(1);
 					if (!(_la === Protobuf3Parser.PLUS || _la === Protobuf3Parser.MINUS)) {
 					this._errHandler.recoverInline(this);
@@ -1914,36 +1934,16 @@ export class Protobuf3Parser extends Parser {
 					}
 				}
 
-				this.state = 387;
-				this.intLit();
+				this.state = 390;
+				this.floatLit();
 				}
 				break;
 
 			case 3:
 				this.enterOuterAlt(_localctx, 3);
 				{
-				this.state = 389;
-				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-				if (_la === Protobuf3Parser.PLUS || _la === Protobuf3Parser.MINUS) {
-					{
-					this.state = 388;
-					_la = this._input.LA(1);
-					if (!(_la === Protobuf3Parser.PLUS || _la === Protobuf3Parser.MINUS)) {
-					this._errHandler.recoverInline(this);
-					} else {
-						if (this._input.LA(1) === Token.EOF) {
-							this.matchedEOF = true;
-						}
-
-						this._errHandler.reportMatch(this);
-						this.consume();
-					}
-					}
-				}
-
 				this.state = 391;
-				this.floatLit();
+				this.strLit();
 				}
 				break;
 
@@ -1951,7 +1951,7 @@ export class Protobuf3Parser extends Parser {
 				this.enterOuterAlt(_localctx, 4);
 				{
 				this.state = 392;
-				this.strLit();
+				this.boolLit();
 				}
 				break;
 
@@ -1959,7 +1959,7 @@ export class Protobuf3Parser extends Parser {
 				this.enterOuterAlt(_localctx, 5);
 				{
 				this.state = 393;
-				this.boolLit();
+				this.blockLit();
 				}
 				break;
 
@@ -1967,7 +1967,7 @@ export class Protobuf3Parser extends Parser {
 				this.enterOuterAlt(_localctx, 6);
 				{
 				this.state = 394;
-				this.blockLit();
+				this.fullIdent();
 				}
 				break;
 			}
@@ -2645,7 +2645,7 @@ export class Protobuf3Parser extends Parser {
 		"\n\x1F\f\x1F\x0E\x1F\u015E\v\x1F\x03\x1F\x03\x1F\x03 \x03 \x03 \x05 \u0165" +
 		"\n \x03!\x03!\x03!\x03!\x05!\u016B\n!\x03!\x03!\x03!\x03!\x03!\x05!\u0172" +
 		"\n!\x03!\x03!\x03!\x03!\x03!\x07!\u0179\n!\f!\x0E!\u017C\v!\x03!\x03!" +
-		"\x05!\u0180\n!\x03\"\x03\"\x05\"\u0184\n\"\x03\"\x03\"\x05\"\u0188\n\"" +
+		"\x05!\u0180\n!\x03\"\x05\"\u0183\n\"\x03\"\x03\"\x05\"\u0187\n\"\x03\"" +
 		"\x03\"\x03\"\x03\"\x03\"\x05\"\u018E\n\"\x03#\x03#\x03#\x03#\x03#\x07" +
 		"#\u0195\n#\f#\x0E#\u0198\v#\x03#\x03#\x03$\x03$\x03%\x03%\x05%\u01A0\n" +
 		"%\x03&\x03&\x03&\x07&\u01A5\n&\f&\x0E&\u01A8\v&\x03\'\x03\'\x03(\x03(" +
@@ -2789,13 +2789,13 @@ export class Protobuf3Parser extends Parser {
 		"\u0179\u017C\x03\x02\x02\x02\u017A\u0178\x03\x02\x02\x02\u017A\u017B\x03" +
 		"\x02\x02\x02\u017B\u017D\x03\x02\x02\x02\u017C\u017A\x03\x02\x02\x02\u017D" +
 		"\u0180\x07-\x02\x02\u017E\u0180\x07&\x02\x02\u017F\u0175\x03\x02\x02\x02" +
-		"\u017F\u017E\x03\x02\x02\x02\u0180A\x03\x02\x02\x02\u0181\u018E\x05J&" +
-		"\x02\u0182\u0184\t\x05\x02\x02\u0183\u0182\x03\x02\x02\x02\u0183\u0184" +
-		"\x03\x02\x02\x02\u0184\u0185\x03\x02\x02\x02\u0185\u018E\x05^0\x02\u0186" +
-		"\u0188\t\x05\x02\x02\u0187\u0186\x03\x02\x02\x02\u0187\u0188\x03\x02\x02" +
-		"\x02\u0188\u0189\x03\x02\x02\x02\u0189\u018E\x05d3\x02\u018A\u018E\x05" +
-		"`1\x02\u018B\u018E\x05b2\x02\u018C\u018E\x05D#\x02\u018D\u0181\x03\x02" +
-		"\x02\x02\u018D\u0183\x03\x02\x02\x02\u018D\u0187\x03\x02\x02\x02\u018D" +
+		"\u017F\u017E\x03\x02\x02\x02\u0180A\x03\x02\x02\x02\u0181\u0183\t\x05" +
+		"\x02\x02\u0182\u0181\x03\x02\x02\x02\u0182\u0183\x03\x02\x02\x02\u0183" +
+		"\u0184\x03\x02\x02\x02\u0184\u018E\x05^0\x02\u0185\u0187\t\x05\x02\x02" +
+		"\u0186\u0185\x03\x02\x02\x02\u0186\u0187\x03\x02\x02\x02\u0187\u0188\x03" +
+		"\x02\x02\x02\u0188\u018E\x05d3\x02\u0189\u018E\x05`1\x02\u018A\u018E\x05" +
+		"b2\x02\u018B\u018E\x05D#\x02\u018C\u018E\x05J&\x02\u018D\u0182\x03\x02" +
+		"\x02\x02\u018D\u0186\x03\x02\x02\x02\u018D\u0189\x03\x02\x02\x02\u018D" +
 		"\u018A\x03\x02\x02\x02\u018D\u018B\x03\x02\x02\x02\u018D\u018C\x03\x02" +
 		"\x02\x02\u018EC\x03\x02\x02\x02\u018F\u0196\x07,\x02\x02\u0190\u0191\x05" +
 		"H%\x02\u0191\u0192\x072\x02\x02\u0192\u0193\x05B\"\x02\u0193\u0195\x03" +
@@ -2829,7 +2829,7 @@ export class Protobuf3Parser extends Parser {
 		"e\x03\x02\x02\x02\u01D9\u01DA\t\x07\x02\x02\u01DAg\x03\x02\x02\x02-np" +
 		"z\x8F\x91\x94\x9E\xA7\xB6\xB8\xC5\xD6\xED\xF2\xFB\u0102\u0104\u010B\u0111" +
 		"\u011B\u0123\u0128\u012C\u0136\u0147\u0154\u015C\u0164\u016A\u0171\u0178" +
-		"\u017A\u017F\u0183\u0187\u018D\u0196\u019F\u01A6\u01B8\u01BF\u01C5\u01CC";
+		"\u017A\u017F\u0182\u0186\u018D\u0196\u019F\u01A6\u01B8\u01BF\u01C5\u01CC";
 	public static __ATN: ATN;
 	public static get _ATN(): ATN {
 		if (!Protobuf3Parser.__ATN) {
@@ -4264,9 +4264,6 @@ export class RpcContext extends ParserRuleContext {
 
 
 export class ConstantContext extends ParserRuleContext {
-	public fullIdent(): FullIdentContext | undefined {
-		return this.tryGetRuleContext(0, FullIdentContext);
-	}
 	public intLit(): IntLitContext | undefined {
 		return this.tryGetRuleContext(0, IntLitContext);
 	}
@@ -4283,6 +4280,9 @@ export class ConstantContext extends ParserRuleContext {
 	}
 	public blockLit(): BlockLitContext | undefined {
 		return this.tryGetRuleContext(0, BlockLitContext);
+	}
+	public fullIdent(): FullIdentContext | undefined {
+		return this.tryGetRuleContext(0, FullIdentContext);
 	}
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);

@@ -4,7 +4,7 @@ import * as path from "path";
 import { CharStreams, CommonTokenStream } from 'antlr4ts';
 import { AbstractParseTreeVisitor } from 'antlr4ts/tree/AbstractParseTreeVisitor';
 
-import { EnumDefContext, EnumFieldContext, FieldContext, ImportStatementContext, MapFieldContext, MessageDefContext, MessageElementContext, OneofContext, OneofFieldContext, Protobuf3Parser, ProtoContext, RpcContext, ServiceDefContext, ServiceElementContext } from './generated/Protobuf3Parser'
+import { ConstantContext, EnumDefContext, EnumFieldContext, FieldContext, ImportStatementContext, MapFieldContext, MessageDefContext, MessageElementContext, OneofContext, OneofFieldContext, OptionStatementContext, Protobuf3Parser, ProtoContext, RpcContext, ServiceDefContext, ServiceElementContext } from './generated/Protobuf3Parser'
 import { Protobuf3Visitor } from './generated/Protobuf3Visitor';
 import { Protobuf3Lexer } from './generated/Protobuf3Lexer'
 import { FileDescriptor, FileImport } from './reflection/FileDescriptor';
@@ -16,8 +16,9 @@ import { EnumDescriptor } from './reflection/EnumDescriptor';
 import { trimChar } from './utils';
 import { EnumFieldDescriptor } from "./reflection/EnumFieldDescriptor";
 import { FieldDescriptor, MapField } from "./reflection/FieldDescriptor";
+import { Option, Options } from "./reflection/Options";
 
-const filePath = path.resolve(__dirname, "../src/tests/proto/example.proto")
+const filePath = path.resolve(__dirname, "../src/tests/proto/option.proto")
 const content = fs.readFileSync(filePath).toString();
 
 // Create the lexer and parser
@@ -30,7 +31,69 @@ let parser = new Protobuf3Parser(tokenStream);
 // Parse the input, where `compilationUnit` is whatever entry point you defined
 let tree = parser.proto();
 
-class Visitor extends AbstractParseTreeVisitor<IDescriptor> implements Protobuf3Visitor<IDescriptor> {
+const extractOptionConstantValue = (ctx: ConstantContext): any => {
+    let result: any = null;
+
+    if (ctx.boolLit()) {
+        result = ctx.boolLit()!.text === "true";
+    }
+
+    if (ctx.strLit()) {
+        result = trimChar(ctx.strLit()!.text, "\"");
+    }
+
+    if (ctx.intLit()) {
+        if (ctx.MINUS()) {
+            result = -Number.parseInt(ctx.intLit()!.text);
+        } else {
+            result = Number.parseInt(ctx.intLit()!.text);
+        }
+    }
+
+    if (ctx.floatLit()) {
+        if (ctx.MINUS()) {
+            result = -Number.parseFloat(ctx.floatLit()!.text);
+        } else {
+            result = Number.parseFloat(ctx.floatLit()!.text);
+        }
+    }
+
+    if (ctx.fullIdent()) {
+        result = ctx.fullIdent()!.text;
+    }
+
+    if (ctx.blockLit()) {
+        result = {}
+
+        const idents = ctx.blockLit()!.ident();
+        const constants = ctx.blockLit()!.constant();
+
+        idents.forEach((ident, index) => {
+            result[ident.text] = extractOptionConstantValue(constants[index]);
+        })
+    }
+
+    return result
+}
+
+const extractOptions = (ctx: OptionStatementContext): Options => {
+    const options: Options = {};
+
+    const fullIndent = ctx.optionName().fullIdent();
+    let optionName = fullIndent[0].text;
+        
+    if (fullIndent.length === 2) {
+        optionName += "." + fullIndent[1].text;
+    }
+
+    let optionValue: any = extractOptionConstantValue(ctx.constant());
+
+    options[optionName] = optionValue;
+
+    return options;
+}
+
+class Visitor extends AbstractParseTreeVisitor<IDescriptor | Option> implements Protobuf3Visitor<IDescriptor | Option> {
     public fileDescriptor: FileDescriptor;
 
     private namespace: string[] = [];
@@ -47,13 +110,16 @@ class Visitor extends AbstractParseTreeVisitor<IDescriptor> implements Protobuf3
     visitProto(ctx: ProtoContext): FileDescriptor {
         const topLevelDefs = ctx.topLevelDef();
 
-        const packge = ctx.packageStatement()[0].fullIdent().text;
+        const packge = ctx.packageStatement()[0]?.fullIdent()?.text || "";
         this.fileDescriptor.package = packge;
         this.namespace.push(packge);
 
         ctx.importStatement().forEach(importStatement => {
             this.visitImportStatement(importStatement);
         });
+
+        const options = ctx.optionStatement()
+            .map(optionStatement => extractOptions(optionStatement));
 
         const services = topLevelDefs
             .filter(topLevelDef => Boolean(topLevelDef.serviceDef()))
@@ -67,6 +133,7 @@ class Visitor extends AbstractParseTreeVisitor<IDescriptor> implements Protobuf3
             .filter(topLevelDef => Boolean(topLevelDef.enumDef()))
             .map((topLevelDef, index) => this.visitEnumDef(topLevelDef.enumDef()!, index))
 
+        this.fileDescriptor.options.push(...options);
         this.fileDescriptor.services.push(...services);
         this.fileDescriptor.messages.push(...messages);
         this.fileDescriptor.enums.push(...enums);
@@ -260,8 +327,17 @@ class Visitor extends AbstractParseTreeVisitor<IDescriptor> implements Protobuf3
             fieldValue: fieldValue
         });
     }
+
+    // visitOptionStatement(ctx: OptionStatementContext): Option {
+    //     const optionName = ctx.optionName().text;
+    //     const optionValue = ctx.constant().text;
+
+    //     return {
+            
+    //     }
+    // }
 }
 
 const visitor = new Visitor();
 
-console.log(JSON.stringify(visitor.visit(tree).toObject(), undefined, 2))
+console.log(JSON.stringify((visitor.visit(tree) as IDescriptor).toObject(), undefined, 2))

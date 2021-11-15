@@ -1,8 +1,6 @@
-import { buildNamespace } from '../utils';
 import { BaseDescriptor, IBaseDescriptorProps } from './BaseDescriptor';
 import { EnumDescriptor } from './EnumDescriptor';
 import { FieldDescriptor } from './FieldDescriptor';
-import { FileDescriptor } from './FileDescriptor';
 
 export class MessageDescriptor extends BaseDescriptor {
     /**
