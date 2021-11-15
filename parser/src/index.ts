@@ -4,7 +4,7 @@ import * as path from "path";
 import { CharStreams, CommonTokenStream } from 'antlr4ts';
 import { AbstractParseTreeVisitor } from 'antlr4ts/tree/AbstractParseTreeVisitor';
 
-import { ConstantContext, EnumDefContext, EnumFieldContext, FieldContext, ImportStatementContext, MapFieldContext, MessageDefContext, MessageElementContext, OneofContext, OneofFieldContext, OptionStatementContext, Protobuf3Parser, ProtoContext, RpcContext, ServiceDefContext, ServiceElementContext } from './generated/Protobuf3Parser'
+import { ConstantContext, EnumDefContext, EnumElementContext, EnumFieldContext, FieldContext, ImportStatementContext, MapFieldContext, MessageDefContext, MessageElementContext, OneofContext, OneofFieldContext, OptionStatementContext, Protobuf3Parser, ProtoContext, RpcContext, ServiceDefContext, ServiceElementContext } from './generated/Protobuf3Parser'
 import { Protobuf3Visitor } from './generated/Protobuf3Visitor';
 import { Protobuf3Lexer } from './generated/Protobuf3Lexer'
 import { FileDescriptor, FileImport } from './reflection/FileDescriptor';
@@ -305,11 +305,16 @@ class Visitor extends AbstractParseTreeVisitor<IDescriptor | Option> implements 
             .map((enumElement, index) => this.visitEnumField(enumElement.enumField()!, index))
         this.namespace.pop();
 
+        const options = ctx.enumBody().enumElement()
+            .filter(enumElement => Boolean(enumElement.optionStatement()))
+            .map(enumElement => extractOptions(enumElement.optionStatement()!))
+
         return new EnumDescriptor({
             index,
             name: enumName,
             namespace: this.namespace.join('.'),
             fileDescriptor: this.fileDescriptor,
+            options,
             fields
         });
     }
