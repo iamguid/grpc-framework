@@ -4,7 +4,7 @@ import * as path from "path";
 import { CharStreams, CommonTokenStream } from 'antlr4ts';
 import { AbstractParseTreeVisitor } from 'antlr4ts/tree/AbstractParseTreeVisitor';
 
-import { ConstantContext, EnumDefContext, EnumElementContext, EnumFieldContext, EnumValueOptionContext, FieldContext, ImportStatementContext, MapFieldContext, MessageDefContext, MessageElementContext, OneofContext, OneofFieldContext, OptionStatementContext, Protobuf3Parser, ProtoContext, RpcContext, ServiceDefContext, ServiceElementContext } from './generated/Protobuf3Parser'
+import { ConstantContext, EnumDefContext, EnumElementContext, EnumFieldContext, EnumValueOptionContext, FieldContext, FieldOptionContext, ImportStatementContext, MapFieldContext, MessageDefContext, MessageElementContext, OneofContext, OneofFieldContext, OptionStatementContext, Protobuf3Parser, ProtoContext, RpcContext, ServiceDefContext, ServiceElementContext } from './generated/Protobuf3Parser'
 import { Protobuf3Visitor } from './generated/Protobuf3Visitor';
 import { Protobuf3Lexer } from './generated/Protobuf3Lexer'
 import { FileDescriptor, FileImport } from './reflection/FileDescriptor';
@@ -76,7 +76,7 @@ const extractOptionConstantValue = (ctx: ConstantContext): any => {
     return result
 }
 
-const extractOptions = (ctx: OptionStatementContext | EnumValueOptionContext): Options => {
+const extractOptions = (ctx: OptionStatementContext | EnumValueOptionContext | FieldOptionContext): Options => {
     const options: Options = {};
 
     const fullIndent = ctx.optionName().fullIdent();
@@ -250,11 +250,15 @@ class Visitor extends AbstractParseTreeVisitor<IDescriptor | Option> implements 
         const fieldNumber = Number.parseInt(ctx.fieldNumber().text, 10);
         const isRepeated = Boolean(ctx.REPEATED()?.text);
 
+        const options = ctx.fieldOptions()?.fieldOption()
+            .map(fieldOption => extractOptions(fieldOption));
+
         return new FieldDescriptor({
             index,
             name: fieldName,
             namespace: this.namespace.join('.'),
             fileDescriptor: this.fileDescriptor,
+            options: options || [],
             type: filedType,
             repeated: isRepeated,
             fieldNumber 
@@ -268,11 +272,15 @@ class Visitor extends AbstractParseTreeVisitor<IDescriptor | Option> implements 
         const valueType = ctx.type_().text;
         const mapField: MapField = { keyType, valueType }
 
+        const options = ctx.fieldOptions()?.fieldOption()
+            .map(fieldOption => extractOptions(fieldOption));
+
         return new FieldDescriptor({
             index,
             name: fieldName,
             namespace: this.namespace.join('.'),
             fileDescriptor: this.fileDescriptor,
+            options: options || [],
             type: "",
             repeated: false,
             fieldNumber,
@@ -285,11 +293,15 @@ class Visitor extends AbstractParseTreeVisitor<IDescriptor | Option> implements 
         const filedType = ctx.type_().text;
         const fieldNumber = Number.parseInt(ctx.fieldNumber().text, 10);
 
+        const options = ctx.fieldOptions()?.fieldOption()
+            .map(fieldOption => extractOptions(fieldOption));
+
         return new FieldDescriptor({
             index,
             name: fieldName,
             namespace: this.namespace.join('.'),
             fileDescriptor: this.fileDescriptor,
+            options: options || [],
             type: filedType,
             repeated: false,
             fieldNumber 
