@@ -169,11 +169,16 @@ class Visitor extends AbstractParseTreeVisitor<IDescriptor | Option> implements 
             .map((serviceElement, index) => this.visitRpc(serviceElement.rpc()!, index))
         this.namespace.pop();
 
+        const options = ctx.serviceElement()
+            .filter(serviceElement => Boolean(serviceElement.optionStatement()))
+            .map(serviceElement => extractOptions(serviceElement.optionStatement()!));
+
         return new ServiceDescriptor({
             index,
             name: serviceName,
             namespace: this.namespace.join('.'),
             fileDescriptor: this.fileDescriptor,
+            options,
             methods
         });
     }
