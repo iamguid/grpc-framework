@@ -4,7 +4,7 @@ import * as path from "path";
 import { CharStreams, CommonTokenStream } from 'antlr4ts';
 import { AbstractParseTreeVisitor } from 'antlr4ts/tree/AbstractParseTreeVisitor';
 
-import { ConstantContext, EnumDefContext, EnumElementContext, EnumFieldContext, FieldContext, ImportStatementContext, MapFieldContext, MessageDefContext, MessageElementContext, OneofContext, OneofFieldContext, OptionStatementContext, Protobuf3Parser, ProtoContext, RpcContext, ServiceDefContext, ServiceElementContext } from './generated/Protobuf3Parser'
+import { ConstantContext, EnumDefContext, EnumElementContext, EnumFieldContext, EnumValueOptionContext, FieldContext, ImportStatementContext, MapFieldContext, MessageDefContext, MessageElementContext, OneofContext, OneofFieldContext, OptionStatementContext, Protobuf3Parser, ProtoContext, RpcContext, ServiceDefContext, ServiceElementContext } from './generated/Protobuf3Parser'
 import { Protobuf3Visitor } from './generated/Protobuf3Visitor';
 import { Protobuf3Lexer } from './generated/Protobuf3Lexer'
 import { FileDescriptor, FileImport } from './reflection/FileDescriptor';
@@ -76,7 +76,7 @@ const extractOptionConstantValue = (ctx: ConstantContext): any => {
     return result
 }
 
-const extractOptions = (ctx: OptionStatementContext): Options => {
+const extractOptions = (ctx: OptionStatementContext | EnumValueOptionContext): Options => {
     const options: Options = {};
 
     const fullIndent = ctx.optionName().fullIdent();
@@ -323,11 +323,15 @@ class Visitor extends AbstractParseTreeVisitor<IDescriptor | Option> implements 
         const fieldName = ctx.ident().text;
         const fieldValue = Number.parseInt(ctx.intLit().text);
 
+        const options = ctx.enumValueOptions()?.enumValueOption()
+            .map(enumValueOption => extractOptions(enumValueOption))
+
         return new EnumFieldDescriptor({
             index,
             name: fieldName,
             namespace: this.namespace.join('.'),
             fileDescriptor: this.fileDescriptor,
+            options: options || [],
             fieldName: fieldName,
             fieldValue: fieldValue
         });
