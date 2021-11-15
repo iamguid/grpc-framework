@@ -179,11 +179,15 @@ class Visitor extends AbstractParseTreeVisitor<IDescriptor | Option> implements 
     }
 
     visitRpc(ctx: RpcContext, index = 0): MethodDescriptor {
+        const options = ctx.optionStatement()
+            .map(optionStatement => extractOptions(optionStatement));
+
         return new MethodDescriptor({
             index,
             name: ctx.rpcName().text,
             namespace: this.namespace.join('.'),
             fileDescriptor: this.fileDescriptor,
+            options,
             isClientStreaming: Boolean(ctx.tryGetToken(Protobuf3Parser.STREAM, 0)),
             isServerStreaming: Boolean(ctx.tryGetToken(Protobuf3Parser.STREAM, 1)),
             inputMessageType: ctx.messageType(0).text,
