@@ -1,0 +1,40 @@
+{
+  "syntax": 3,
+  "imports": [],
+  "enums": [],
+  "messages": [
+    {
+      "name": "SimpleMessage",
+      "enums": [],
+      "options": {},
+      "messages": [],
+      "fields": [
+        {
+          "name": "uuid",
+          "type": "string",
+          "tag": 1,
+          "required": false,
+          "repeated": false,
+          "optional": false,
+          "options": {}
+        },
+        {
+          "name": "display_name",
+          "type": "string",
+          "tag": 2,
+          "required": false,
+          "repeated": false,
+          "optional": false,
+          "options": {}
+        }
+      ],
+      "extends": [],
+      "extensions": [],
+      "reserved": []
+    }
+  ],
+  "options": {},
+  "extends": [],
+  "services": [],
+  "package": "examples.simple_message"
+}

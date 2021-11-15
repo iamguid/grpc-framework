@@ -1,0 +1,66 @@
+{
+  "syntax": 3,
+  "imports": [],
+  "enums": [],
+  "messages": [
+    {
+      "name": "Request",
+      "enums": [],
+      "options": {},
+      "messages": [],
+      "fields": [
+        {
+          "name": "someValue",
+          "type": "int32",
+          "tag": 1,
+          "required": false,
+          "repeated": false,
+          "optional": false,
+          "options": {}
+        }
+      ],
+      "extends": [],
+      "extensions": [],
+      "reserved": []
+    },
+    {
+      "name": "Response",
+      "enums": [],
+      "options": {},
+      "messages": [],
+      "fields": [
+        {
+          "name": "someValue",
+          "type": "int32",
+          "tag": 1,
+          "required": false,
+          "repeated": false,
+          "optional": false,
+          "options": {}
+        }
+      ],
+      "extends": [],
+      "extensions": [],
+      "reserved": []
+    }
+  ],
+  "options": {},
+  "extends": [],
+  "services": [
+    {
+      "name": "SimpleService",
+      "methods": [
+        {
+          "name": "GetSomeValue",
+          "inputType": "Request",
+          "outputType": "Response",
+          "clientStreaming": false,
+          "serverStreaming": false,
+          "options": {}
+        }
+      ],
+      "options": {}
+    }
+  ],
+  "package": "examples.simple_service"
+}
