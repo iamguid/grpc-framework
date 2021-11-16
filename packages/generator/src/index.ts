@@ -3,22 +3,29 @@ import * as fs from "fs";
 import { parse, FileDescriptor } from "@grpc-web-framework/parser";
 import { walkByFiles } from "./filesWalker";
 import { FileDescriptorWrapper } from "./FileDescriptorWrapper";
+import { WellKnownTypesFilesMap } from "./WellKnownTypesFilesMap";
 
-const makeFilesDescriptorsWrappers = (filesDescriptosMap: Map<string, FileDescriptor>): FileDescriptorWrapper[] => {
+const makeFilesDescriptorsWrappers = (filesDescriptorsMap: Map<string, FileDescriptor>): FileDescriptorWrapper[] => {
     const wrappers: Map<string, FileDescriptorWrapper> = new Map();
 
     function resolve(fileName: string, fileDescriptor: FileDescriptor): FileDescriptorWrapper {
-        console.log("fileDescriptor", fileName, fileDescriptor);
+        const imports = fileDescriptor.imports.filter(imprt => {
+            if (imprt.path in WellKnownTypesFilesMap) {
+                return false;
+            }
 
-        for (const imprt of fileDescriptor.imports) {
+            return true;
+        })
+
+        for (const imprt of imports) {
             if (wrappers.has(imprt.path)) {
                 return wrappers.get(imprt.path)!;
             } else {
-                wrappers.set(imprt.path, resolve(imprt.path, filesDescriptosMap.get(imprt.path)!));
+                wrappers.set(imprt.path, resolve(imprt.path, filesDescriptorsMap.get(imprt.path)!));
             }
         }
 
-        const dependenciesMap = fileDescriptor.imports.reduce((accum, imprt) => {
+        const dependenciesMap = imports.reduce((accum, imprt) => {
             return accum.set(imprt.path, wrappers.get(imprt.path)!)
         }, new Map());
 
@@ -29,14 +36,14 @@ const makeFilesDescriptorsWrappers = (filesDescriptosMap: Map<string, FileDescri
         return newWrapper;
     }
 
-    for (const [key, value] of filesDescriptosMap) {
+    for (const [key, value] of filesDescriptorsMap) {
         resolve(key, value)
     }
 
     return Array.from(wrappers.values());
 }
 
-export const resolve = (protoDir: string): FileDescriptorWrapper[] => {
+const resolve = (protoDir: string): FileDescriptorWrapper[] => {
     const walkResult = walkByFiles<Map<string, FileDescriptor>>({
         basePath: protoDir,
         filePath: "",
@@ -48,8 +55,6 @@ export const resolve = (protoDir: string): FileDescriptorWrapper[] => {
             }
         },
     });
-
-    // console.log("walkresult", JSON.stringify(Array.from(walkResult.entries()).map(([key, value]) => value.toObject()), undefined, 2));
 
     return makeFilesDescriptorsWrappers(walkResult);
 }

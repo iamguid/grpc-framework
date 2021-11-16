@@ -20,15 +20,13 @@ export abstract class BaseDescriptor implements IDescriptor {
     public readonly index: number | null;
 
     /**
-     * Returns the name of the entity (field, message etc) being described.
+     * Returns the name of the entity.
      */
     public readonly name: string;
 
     /**
-     * The fully qualified namespace of the descriptor's target.
-     * 
-     * Includes {package name}.{path to message}
-     * Does not include name of descriptor
+     * The namespace inside .proto file of the descriptor's target.
+     * Namespace does not include package name
      */
     public readonly namespace: string;
 
@@ -43,13 +41,24 @@ export abstract class BaseDescriptor implements IDescriptor {
         this.namespace = props.namespace;
         this.fileDescriptor = props.fileDescriptor;
 
-        this.fileDescriptor.registry.set(this.fullpath, this);
+        this.fileDescriptor.registry.set(this.fullname, this);
     }
 
     /**
      * Returns full path of entity being described.
+     * 
+     * {package}.{namespace}.{name}
      */
     public get fullpath() {
+        return buildNamespace(this.fileDescriptor.package, this.namespace, this.name);
+    }
+
+    /**
+     * Returns full name of entity being described.
+     * 
+     * {namespace}.{name}
+     */
+    public get fullname() {
         return buildNamespace(this.namespace, this.name);
     }
 

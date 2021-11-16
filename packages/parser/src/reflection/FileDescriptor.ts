@@ -23,19 +23,6 @@ export class FileDescriptor implements IDescriptor {
     public package: string;
 
     /**
-     * Returns the name of the entity (field, message etc) being described.
-     */
-    public name: string;
-
-    /**
-     * The fully qualified namespace of the descriptor's target.
-     * 
-     * Includes {package name}.{path to message}
-     * Does not include name of message
-     */
-    public namespace: string;
-
-    /**
      * Contains all options that defined in .proto file.
      */
     public readonly options: Options[] = [];
@@ -64,18 +51,9 @@ export class FileDescriptor implements IDescriptor {
         this.registry = new DescriptorsRegistry();
     }
 
-    /**
-     * Returns full path of entry being described.
-     */
-    public get fullpath() {
-        return buildNamespace(this.namespace, this.name);
-    }
-
     public toObject() {
         return {
             package: this.package,
-            name: this.name,
-            namespace: this.namespace,
             options: this.options,
             imports: this.imports,
             services: this.services.map(service => service.toObject()),

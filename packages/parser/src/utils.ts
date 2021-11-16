@@ -1,4 +1,5 @@
 import { ConstantContext, OptionStatementContext, EnumValueOptionContext, FieldOptionContext } from "./generated/Protobuf3Parser";
+import { DescriptorsRegistry, MessageDescriptor } from "./reflection";
 import { Options } from "./reflection/Options";
 
 export function buildNamespace(...items: (string | undefined | null)[]) {
@@ -92,4 +93,9 @@ export const trimChar = (str: string, charToRemove: string) => {
   }
 
   return str;
+}
+
+export const normalizeTypeName = (typeName: string, registry: DescriptorsRegistry, namespace: string) => {
+  const checkName = buildNamespace(namespace, typeName);
+  return registry.descriptors.has(checkName) ? checkName : typeName
 }

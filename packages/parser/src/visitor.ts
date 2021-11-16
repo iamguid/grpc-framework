@@ -9,7 +9,7 @@ import { IDescriptor } from "./reflection/IDescriptor";
 import { MessageDescriptor } from "./reflection/MessageDescriptor";
 import { MethodDescriptor } from "./reflection/MethodDescriptor";
 import { ServiceDescriptor } from "./reflection/ServiceDescriptor";
-import { extractOptions, trimChar } from "./utils";
+import { extractOptions, normalizeTypeName, trimChar } from "./utils";
 
 export class Visitor extends AbstractParseTreeVisitor<IDescriptor> implements Protobuf3Visitor<IDescriptor> {
     public fileDescriptor: FileDescriptor;
@@ -30,7 +30,6 @@ export class Visitor extends AbstractParseTreeVisitor<IDescriptor> implements Pr
 
         const packge = ctx.packageStatement()[0]?.fullIdent()?.text || "";
         this.fileDescriptor.package = packge;
-        this.namespace.push(packge);
 
         ctx.importStatement().forEach(importStatement => {
             this.visitImportStatement(importStatement);
@@ -177,8 +176,9 @@ export class Visitor extends AbstractParseTreeVisitor<IDescriptor> implements Pr
     }
 
     visitField(ctx: FieldContext, index = 0): FieldDescriptor {
+        const namespace = this.namespace.join('.');
         const fieldName = ctx.fieldName().text;
-        const filedType = ctx.type_().text;
+        const filedType = normalizeTypeName(ctx.type_().text, this.fileDescriptor.registry, namespace);
         const fieldNumber = Number.parseInt(ctx.fieldNumber().text, 10);
         const isRepeated = Boolean(ctx.REPEATED()?.text);
 
@@ -188,7 +188,7 @@ export class Visitor extends AbstractParseTreeVisitor<IDescriptor> implements Pr
         return new FieldDescriptor({
             index,
             name: fieldName,
-            namespace: this.namespace.join('.'),
+            namespace,
             fileDescriptor: this.fileDescriptor,
             options: options || [],
             type: filedType,
@@ -198,10 +198,11 @@ export class Visitor extends AbstractParseTreeVisitor<IDescriptor> implements Pr
     }
 
     visitMapField(ctx: MapFieldContext, index = 0): FieldDescriptor {
+        const namespace = this.namespace.join('.');
         const fieldName = ctx.mapName().text;
         const fieldNumber = Number.parseInt(ctx.fieldNumber().text, 10);
-        const keyType = ctx.keyType().text;
-        const valueType = ctx.type_().text;
+        const keyType = normalizeTypeName(ctx.keyType().text, this.fileDescriptor.registry, namespace);
+        const valueType = normalizeTypeName(ctx.type_().text, this.fileDescriptor.registry, namespace);
         const mapField: MapField = { keyType, valueType }
 
         const options = ctx.fieldOptions()?.fieldOption()
@@ -210,7 +211,7 @@ export class Visitor extends AbstractParseTreeVisitor<IDescriptor> implements Pr
         return new FieldDescriptor({
             index,
             name: fieldName,
-            namespace: this.namespace.join('.'),
+            namespace,
             fileDescriptor: this.fileDescriptor,
             options: options || [],
             type: "",
@@ -221,8 +222,9 @@ export class Visitor extends AbstractParseTreeVisitor<IDescriptor> implements Pr
     }
 
     visitOneofField(ctx: OneofFieldContext, index = 0, oneofName = ''): FieldDescriptor {
+        const namespace = this.namespace.join('.');
         const fieldName = ctx.fieldName().text;
-        const filedType = ctx.type_().text;
+        const filedType = normalizeTypeName(ctx.type_().text, this.fileDescriptor.registry, namespace);
         const fieldNumber = Number.parseInt(ctx.fieldNumber().text, 10);
 
         const options = ctx.fieldOptions()?.fieldOption()
@@ -231,8 +233,9 @@ export class Visitor extends AbstractParseTreeVisitor<IDescriptor> implements Pr
         return new FieldDescriptor({
             index,
             name: fieldName,
-            namespace: this.namespace.join('.'),
+            namespace,
             fileDescriptor: this.fileDescriptor,
+            oneofName,
             options: options || [],
             type: filedType,
             repeated: false,

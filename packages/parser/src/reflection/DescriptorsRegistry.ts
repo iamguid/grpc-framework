@@ -3,19 +3,19 @@ import { IDescriptor } from "./IDescriptor";
 export class DescriptorsRegistry {
     public readonly descriptors: Map<string, IDescriptor> = new Map();
 
-    public get(fullpath: string) {
-        if (!this.descriptors.has(fullpath)) {
-            throw new Error(`Descriptor "${fullpath}" not  found`)
+    public get(fullname: string) {
+        if (!this.descriptors.has(fullname)) {
+            throw new Error(`Descriptor "${fullname}" not  found`)
         }
 
-        return this.descriptors.get(fullpath)!;
+        return this.descriptors.get(fullname)!;
     }
 
-    public set(fullpath: string, descriptor: IDescriptor) {
-        if (this.descriptors.has(fullpath)) {
-            throw new Error(`Descriptor "${fullpath}" already exists`)
+    public set(fullname: string, descriptor: IDescriptor) {
+        if (this.descriptors.has(fullname)) {
+            throw new Error(`Descriptor "${fullname}" already exists`)
         }
 
-        this.descriptors.set(fullpath, descriptor);
+        this.descriptors.set(fullname, descriptor);
     }
 }

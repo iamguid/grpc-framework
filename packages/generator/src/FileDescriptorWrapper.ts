@@ -1,8 +1,8 @@
-import { FieldDescriptor, FileDescriptor, IDescriptor, MethodDescriptor } from "@grpc-web-framework/parser";
+import { BaseDescriptor, FieldDescriptor, FileDescriptor, MethodDescriptor } from "@grpc-web-framework/parser";
 
 export interface IResolveTypeResult {
     file: FileDescriptorWrapper,
-    descriptor: IDescriptor,
+    descriptor: BaseDescriptor,
 }
 
 export const INBUILD_PROTO_TYPES_TO_JS_TYPES: Record<string, string> = {
@@ -45,7 +45,7 @@ export class FileDescriptorWrapper {
         if (this.file.registry.descriptors.has(type)) {
             return {
                 file: this,
-                descriptor: this.file.registry.get(type)
+                descriptor: this.file.registry.get(type) as BaseDescriptor
             }
         } else {
             for (const dependency of this.dependencies.values()) {
@@ -70,7 +70,7 @@ export class FileDescriptorWrapper {
                 throw new Error(`Cannot resolve type "${type}"`);
             }
 
-            resolvedTypesMap.set(resolvedType.descriptor.fullpath, resolvedType);
+            resolvedTypesMap.set(resolvedType.descriptor.fullname, resolvedType);
         }
 
         return resolvedTypesMap;

@@ -5,9 +5,8 @@ package examples.example;
 option go_package = "userv2";
 option java_package = "com.whisk.api.user.v2";
 
-import "google/api/annotations.proto";
-import weak "google/api/field_mask.proto";
-import public "google/api/empty.proto";
+import weak "google/protobuf/field_mask.proto";
+import public "google/protobuf/empty.proto";
 
 enum Gender { // Gender is one or two.
   GENDER_UNSPECIFIED = 0;
@@ -95,9 +94,9 @@ message TestItem {
   string name = 2 [ required = true ];
 
   // Optional
-  google.protobuf.StringValue description = 10;
-  google.protobuf.StringValue test = 11 [ required = true ];
-  repeated google.protobuf.StringValue array = 12;
+  string description = 10;
+  string test = 11 [ required = true ];
+  repeated string array = 12;
 
   // repeated SearchRecipesResponse searches = 40;
   // map<string, SearchRecipesResponse> map_search = 41;
