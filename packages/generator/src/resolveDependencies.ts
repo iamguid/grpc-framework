@@ -1,5 +1,4 @@
-import { FileDescriptorProto } from "google-protobuf/google/protobuf/descriptor_pb";
-import { FileDescriptor } from "./reflection/FileDescriptor";
+import { FileDescriptor } from "@grpc-web-framework/parser/src/reflection/FileDescriptor";
 
 export const resolveDependencies = (protoFilesList: FileDescriptorProto[]) => {
     const filesProtoDescriptors: Map<string, FileDescriptorProto> = new Map();

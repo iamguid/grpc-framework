@@ -1,5 +1,0 @@
-syntax = "proto3";
-
-package examples.empty_service;
-
-service EmptyService {}

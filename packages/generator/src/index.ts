@@ -1,40 +1,86 @@
-import { CodeGeneratorRequest, CodeGeneratorResponse } from 'google-protobuf/google/protobuf/compiler/plugin_pb';
-import { ClientsFilesGenerator } from './ClientsFilesGenerator';
-import { resolveDependencies } from './resolveDependencies';
-import { withAllStdIn } from './utils';
+import * as path from "path";
+import * as fs from "fs";
+import { parse } from "@grpc-web-framework/parser/src";
+import { FileDescriptor } from "@grpc-web-framework/parser/src/reflection/FileDescriptor";
 
-/**
- * This is the ProtoC compiler plugin.
- *
- * The Protocol Buffers Compiler can be extended to [support new languages via plugins](https://developers.google.com/protocol-buffers/docs/reference/other).
- * A plugin is just a program which reads a CodeGeneratorRequest protocol buffer from standard input
- * and then writes a CodeGeneratorResponse protocol buffer to standard output.
- * These message types are defined in [plugin.proto](https://github.com/google/protobuf/blob/master/src/google/protobuf/compiler/plugin.proto).
- *
- */
-withAllStdIn((inputBuff: Buffer) => {
-    try {
-        const typedInputBuff = new Uint8Array(inputBuff.length);
-        typedInputBuff.set(inputBuff);
+export type GeneratorOut = Map<string, FileDescriptor>
 
-        const codeGenRequest = CodeGeneratorRequest.deserializeBinary(typedInputBuff);
-        const codeGenResponse = new CodeGeneratorResponse();
-        
-        const filesDescriptors = resolveDependencies(codeGenRequest.getProtoFileList());
+export interface IGeneratorOptions {
+    protoDir: string,
+    outDir: string,
+}
 
-        const clientsGenerator = new ClientsFilesGenerator.ClientsFilesGenerator(Array.from(filesDescriptors.values()));
-        clientsGenerator.generateClients();
+export interface WalkByFiles<T> {
+    filename: string;
+    result: T;
+}
 
-        for (const output of clientsGenerator.generated) {
-            const file = new CodeGeneratorResponse.File();
-            file.setName(output.fileName);
-            file.setContent(output.content);
-            codeGenResponse.addFile(file);
+export interface WalkByFilesInit<T> extends WalkByFiles<T> {
+    each: (params: WalkByFiles<T>) => void;
+}
+
+const walkByFiles = <T>({ filename, each, result }: WalkByFilesInit<T>): T => {
+    const dirFiles = fs.readdirSync(filename);
+
+    for (const item of dirFiles) {
+      const filepath = path.join(filename, item);
+      const dir = fs.statSync(filepath).isDirectory();
+
+      dir 
+        ? walkByFiles({ each, result, filename: filepath }) 
+        : each({ result, filename: filepath });
+    }
+
+    return result;
+  }
+
+
+export const resolve = (opts: IGeneratorOptions) => {
+    const protoDir = path.isAbsolute(opts.protoDir) ? opts.protoDir : path.join(process.cwd(), opts.protoDir);
+    const _outDir = path.isAbsolute(opts.outDir) ? opts.outDir : path.join(process.cwd(), opts.outDir);
+
+    return walkByFiles<GeneratorOut>({
+        filename: protoDir,
+        result: new Map(),
+        each: ({ result, filename }) => {
+            if (path.extname(filename) === '.proto') {
+                const parsed = parse(fs.readFileSync(filename, 'utf8'));
+                result.set(filename, parsed);
+            }
+        },
+    });
+}
+
+export const resolveDependencies = (walkResultMap: parse) => {
+    const filesProtoDescriptors: Map<string, FileDescriptorProto> = new Map();
+    const filesDescriptors: Map<string, FileDescriptor> = new Map();
+
+    protoFilesList.forEach(fileDescriptorProto => {
+        filesProtoDescriptors.set(fileDescriptorProto.getName()!, fileDescriptorProto);
+    });
+
+    function resolveDeps(fileDescriptorProto: FileDescriptorProto) {
+        const dependenciesProtoDescriptors = fileDescriptorProto.getDependencyList()
+            .map(filename => filesProtoDescriptors.get(filename)!);
+
+        const dependencies: FileDescriptor[] = [];
+
+        for (const dependencyProtoDescriptor of dependenciesProtoDescriptors) {
+            if (filesDescriptors.has(dependencyProtoDescriptor.getName()!)) {
+                return filesDescriptors.get(dependencyProtoDescriptor.getName()!)!;
+            } else {
+                dependencies.push(resolveDeps(dependencyProtoDescriptor));
+            }
         }
 
-        process.stdout.write(Buffer.from(codeGenResponse.serializeBinary()));
-    } catch (err) {
-        console.error('protoc-gen-frontend error: ' + err.stack + '\n');
-        process.exit(1);
+        const descriptor = new FileDescriptor(fileDescriptorProto, dependencies);
+        filesDescriptors.set(fileDescriptorProto.getName()!, descriptor)
+        return descriptor;
     }
-});
+
+    Array.from(filesProtoDescriptors.values()).forEach(protoDescriptor => {
+        resolveDeps(protoDescriptor);
+    })
+
+    return filesDescriptors;
+}

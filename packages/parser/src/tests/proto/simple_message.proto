@@ -1,8 +1,0 @@
-syntax = "proto3";
-
-package examples.simple_message;
-
-message SimpleMessage {
-  string uuid = 1;
-  string display_name = 2;
-}

@@ -1,4 +1,5 @@
 import { buildNamespace } from "../utils";
+import { DescriptorsRegistry } from "./DescriptorsRegistry";
 import { EnumDescriptor } from "./EnumDescriptor";
 import { IDescriptor } from "./IDescriptor";
 import { MessageDescriptor } from "./MessageDescriptor";
@@ -11,6 +12,11 @@ export interface FileImport {
 }
 
 export class FileDescriptor implements IDescriptor {
+    /**
+     * Descriptors registry that contains links to all .proto file descriptors
+     */
+    public readonly registry: DescriptorsRegistry;
+
     /**
      * Package name declared in .proto file.
      */
@@ -53,6 +59,10 @@ export class FileDescriptor implements IDescriptor {
      * Contains all enums descriptors that defined in .proto file.
      */
     public readonly enums: EnumDescriptor[] = [];
+
+    constructor() {
+        this.registry = new DescriptorsRegistry();
+    }
 
     /**
      * Returns full path of entry being described.

@@ -42,6 +42,8 @@ export abstract class BaseDescriptor implements IDescriptor {
         this.name = props.name;
         this.namespace = props.namespace;
         this.fileDescriptor = props.fileDescriptor;
+
+        this.fileDescriptor.registry.set(this.fullpath, this);
     }
 
     /**
