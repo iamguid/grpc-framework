@@ -4,6 +4,7 @@ import { parse, FileDescriptor } from "@grpc-web-framework/parser";
 import { walkByFiles } from "./filesWalker";
 import { FileDescriptorWrapper } from "./FileDescriptorWrapper";
 import { WellKnownTypesFilesMap } from "./WellKnownTypesFilesMap";
+import { ClientsFilesGenerator } from "./ClientsFilesGenerator";
 
 const makeFilesDescriptorsWrappers = (filesDescriptorsMap: Map<string, FileDescriptor>): FileDescriptorWrapper[] => {
     const wrappers: Map<string, FileDescriptorWrapper> = new Map();
@@ -59,4 +60,17 @@ const resolve = (protoDir: string): FileDescriptorWrapper[] => {
     return makeFilesDescriptorsWrappers(walkResult);
 }
 
-console.log(resolve(path.join(__dirname, "../../proto")));
+const generate = (opts: { protoDir: string, outDir: string }) => {
+    const protoDir = path.isAbsolute(opts.protoDir) ? opts.protoDir : path.join(process.cwd(), opts.protoDir);
+    const outDir = path.isAbsolute(opts.outDir) ? opts.outDir : path.join(process.cwd(), opts.outDir);
+    const resolvedDir = resolve(protoDir);
+    const generator = new ClientsFilesGenerator(resolvedDir);
+    generator.generateClients()
+
+    fs.mkdirSync(outDir, { recursive: true });
+    for (const result of generator.generated) {
+        fs.writeFileSync(path.join(outDir, result.fileName), result.content);
+    }
+}
+
+generate({ protoDir: "../../packages/proto", outDir: "./generated" })

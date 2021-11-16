@@ -63,6 +63,7 @@ export class ClientsFilesGenerator extends TSXTGenerator<ClientsFilesGeneratorCo
     private buildGeneratorContext(wrapper: FileDescriptorWrapper): ClientsFilesGeneratorContext {
         const clients: ServiceClient[] = [];
         const dependencies = this.resolveDependencies(wrapper);
+        console.log(dependencies);
 
         for (const service of wrapper.file.services) {
             const methods: ServiceMethod[] = service.methods.map(method => {
@@ -108,7 +109,7 @@ export class ClientsFilesGenerator extends TSXTGenerator<ClientsFilesGeneratorCo
 
                 const imprt = imports.get(filePathWithoutExtension)!;
 
-                dependencies.set(type.descriptor.fullpath, {
+                dependencies.set(type.descriptor.fullname, {
                     import: imprt,
                     typePath: buildNamespace(imprt.name, type.descriptor.name)
                 });
@@ -122,7 +123,7 @@ export class ClientsFilesGenerator extends TSXTGenerator<ClientsFilesGeneratorCo
                 }
 
                 const imprt = imports.get(filePathWithoutExtension)!;
-                dependencies.set(type.descriptor.fullpath, { 
+                dependencies.set(type.descriptor.fullname, { 
                     import: imprt, 
                     typePath: buildNamespace(imprt.name, type.descriptor.name)
                 });
