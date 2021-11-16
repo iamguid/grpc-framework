@@ -1,5 +1,7 @@
 syntax = "proto3";
 
+package examples.nested_messages;
+
 message SearchResponse {
     message Result {
         string url = 1;

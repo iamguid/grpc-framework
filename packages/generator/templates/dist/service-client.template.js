@@ -14,8 +14,8 @@ var _imports = _interopRequireDefault(require("./imports.template"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var _default = ctx => "" + ("" + (0, _header.default)({
-  "packageName": ctx.fileDescriptor.proto.getPackage(),
-  "fileName": ctx.fileDescriptor.name
+  "packageName": ctx.wrapper.file.package,
+  "fileName": ctx.wrapper.fileName
 }, [])) + ("" + "" + "\n") + ("" + (0, _imports.default)({
   "imports": ctx.imports
 }, ["" + ("" + `import * as grpcWeb from "grpc-web"` + "\n") + ("" + `import * jspb from "google-protobuf"` + "\n")])) + ("" + "" + "\n") + ("" + ClientsTempl({

@@ -4,6 +4,8 @@ import { Protobuf3Parser } from "./generated/Protobuf3Parser";
 import { FileDescriptor } from "./reflection/FileDescriptor";
 import { Visitor } from "./visitor";
 
+export * from "./reflection/index";
+
 export const parse = (content: string): FileDescriptor => {
     const inputStream = CharStreams.fromString(content);
     const lexer = new Protobuf3Lexer(inputStream);

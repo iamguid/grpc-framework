@@ -2,7 +2,7 @@
   "name": "@grpc-web-framework/parser",
   "version": "1.0.0",
   "description": "proto files parser based on ANTLR proto3 grammar",
-  "main": "index.js",
+  "main": "lib/index.js",
   "author": "Vladislav Lebedev <iam.guid@gmail.com>",
   "license": "MIT",
   "private": true,

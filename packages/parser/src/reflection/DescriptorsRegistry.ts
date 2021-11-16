@@ -1,14 +1,14 @@
 import { IDescriptor } from "./IDescriptor";
 
 export class DescriptorsRegistry {
-    private descriptors: Map<string, IDescriptor> = new Map();
+    public readonly descriptors: Map<string, IDescriptor> = new Map();
 
     public get(fullpath: string) {
         if (!this.descriptors.has(fullpath)) {
             throw new Error(`Descriptor "${fullpath}" not  found`)
         }
 
-        return this.descriptors.get(fullpath);
+        return this.descriptors.get(fullpath)!;
     }
 
     public set(fullpath: string, descriptor: IDescriptor) {

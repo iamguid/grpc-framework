@@ -1,11 +1,11 @@
 import "babel-plugin-tsxt";
-import { ClientsFilesGenerator } from "../src/ClientsFilesGenerator";
+import { ClientsFilesGeneratorContext, ServiceClient } from "../src/ClientsFilesGenerator";
 import HeaderTempl from "./header.template";
 import ImportsTempl from "./imports.template";
 
-export default (ctx: ClientsFilesGenerator.Context) => (
+export default (ctx: ClientsFilesGeneratorContext) => (
   <templ>
-    <HeaderTempl packageName={ctx.fileDescriptor.proto.getPackage()} fileName={ctx.fileDescriptor.name}/>
+    <HeaderTempl packageName={ctx.wrapper.file.package} fileName={ctx.wrapper.fileName}/>
     <ln/>
     <ImportsTempl imports={ctx.imports}>
       <templ>
@@ -18,7 +18,7 @@ export default (ctx: ClientsFilesGenerator.Context) => (
   </templ>
 )
 
-const ClientsTempl = ({ clients }: { clients: ClientsFilesGenerator.ServiceClient[] }) => (
+const ClientsTempl = ({ clients }: { clients: ServiceClient[] }) => (
   <templ>
     {clients.map(client => (
       <templ>
@@ -31,7 +31,7 @@ const ClientsTempl = ({ clients }: { clients: ClientsFilesGenerator.ServiceClien
   </templ>
 )
 
-const ClientInterfaceTempl = ({ client }: { client: ClientsFilesGenerator.ServiceClient }) => (
+const ClientInterfaceTempl = ({ client }: { client: ServiceClient }) => (
   <templ>
     {`export interface ${client.interfaceClassName} {`}
     <indent>
@@ -51,7 +51,7 @@ const ClientInterfaceTempl = ({ client }: { client: ClientsFilesGenerator.Servic
   </templ>
 )
 
-const ClientClassTempl = ({ client }: { client: ClientsFilesGenerator.ServiceClient }) => (
+const ClientClassTempl = ({ client }: { client: ServiceClient }) => (
   <templ>
     {`export class ${client.clientClassName} extends ${client.interfaceClassName} {`}
     <indent>

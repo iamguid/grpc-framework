@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package examples.nested.nested.some_message;
+
+import "nested_messages.proto";
+
+message SomeOtherMessage {
+    SearchResponse.Result result = 1;
+}

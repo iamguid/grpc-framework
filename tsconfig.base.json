@@ -3,7 +3,6 @@
         "alwaysStrict": true,
         "sourceMap": true,
         "declaration": true,
-        "declarationDir": "lib",
         "target": "es5",
         "removeComments": true,
         "noImplicitReturns": true,
@@ -14,25 +13,7 @@
         "stripInternal": true,
         "noFallthroughCasesInSwitch": true,
         "experimentalDecorators": true,
-        "outDir": "lib",
         "noEmitOnError": true,
         "downlevelIteration": true,
-        "rootDir": "src",
-        "typeRoots": ["./types", "./node_modules/@types"],
-        "types": [
-            "chai",
-            "mocha",
-            "node",
-            "google-protobuf"
-        ],
-        "lib": [
-            "es2015",
-        ]
     },
-    "include": [
-        "src"
-    ],
-    "exclude": [
-        "node_modules"
-    ]
 }

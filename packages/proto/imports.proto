@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package examples.imports;
+
+import "nested/nested/some_message.proto";
+
+message Test {
+     SomeOtherMessage value = 1;
+}
