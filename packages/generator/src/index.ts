@@ -5,6 +5,8 @@ import { walkByFiles } from "./filesWalker";
 import { FileDescriptorWrapper } from "./FileDescriptorWrapper";
 import { WellKnownTypesFilesMap } from "./WellKnownTypesFilesMap";
 import { ClientsFilesGenerator } from "./ClientsFilesGenerator";
+import { ModelsFilesGenerator } from "./ModelsFilesGenerator";
+import { IGeneratorOutput } from "./IGeneratorOutput";
 
 const makeFilesDescriptorsWrappers = (filesDescriptorsMap: Map<string, FileDescriptor>): FileDescriptorWrapper[] => {
     const wrappers: Map<string, FileDescriptorWrapper> = new Map();
@@ -64,11 +66,17 @@ const generate = (opts: { protoDir: string, outDir: string }) => {
     const protoDir = path.isAbsolute(opts.protoDir) ? opts.protoDir : path.join(process.cwd(), opts.protoDir);
     const outDir = path.isAbsolute(opts.outDir) ? opts.outDir : path.join(process.cwd(), opts.outDir);
     const resolvedDir = resolve(protoDir);
-    const generator = new ClientsFilesGenerator(resolvedDir);
-    generator.generateClients()
+
+    const clientsFilesGenerator = new ClientsFilesGenerator(resolvedDir);
+    clientsFilesGenerator.generate()
+
+    const modelsFilesGenerator = new ModelsFilesGenerator(resolvedDir);
+    modelsFilesGenerator.generate()
+
+    const generatedResult: IGeneratorOutput[] = [...clientsFilesGenerator.generated, ...modelsFilesGenerator.generated]
 
     fs.mkdirSync(outDir, { recursive: true });
-    for (const result of generator.generated) {
+    for (const result of generatedResult) {
         fs.writeFileSync(path.join(outDir, result.fileName), result.content);
     }
 }

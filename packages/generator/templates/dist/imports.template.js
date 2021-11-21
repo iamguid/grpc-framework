@@ -9,6 +9,6 @@ require("babel-plugin-tsxt");
 
 var _default = ({
   imports
-}, children) => "" + ("" + children) + ("" + "" + "\n") + ("" + imports.map(imprt => "" + ("" + `import * ${imprt.name} from "${imprt.path}";` + "\n")).join(""));
+}, children) => "" + ("" + children) + ("" + "" + "\n") + ("" + imports.map(imprt => "" + ("" + `import * as ${imprt.name} from "${imprt.path}";` + "\n")).join(""));
 
 exports.default = _default;

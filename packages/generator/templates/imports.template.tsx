@@ -8,7 +8,7 @@ export default ({ imports }: { imports: Import[] }, children: string[]) => (
 
         {imports.map((imprt) => (
             <templ>
-                {`import * ${imprt.name} from "${imprt.path}";`}
+                {`import * as ${imprt.name} from "${imprt.path}";`}
             </templ>
         )).join("")}
     </templ>

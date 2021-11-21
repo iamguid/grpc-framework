@@ -43,7 +43,7 @@ export class ClientsFilesGenerator extends TSXTGenerator<ClientsFilesGeneratorCo
         super();
     }
 
-    public generateClients() {
+    public generate() {
         for (const wrapper of this.files) {
             const generatorCtx = this.buildGeneratorContext(wrapper);
 
@@ -51,7 +51,7 @@ export class ClientsFilesGenerator extends TSXTGenerator<ClientsFilesGeneratorCo
                 const generatorInput: ITSXTGeneratorInput<ClientsFilesGeneratorContext> = {
                     template: require("../../templates/dist/service-client.template").default,
                     protoFileName: wrapper.fileName,
-                    resultFileName: replaceProtoSuffix(wrapper.fileName, 'client.ts'),
+                    resultFileName: replaceProtoSuffix(wrapper.fileName, 'clients.ts'),
                     generatorCtx
                 };
 

@@ -10,7 +10,7 @@ export default (ctx: ClientsFilesGeneratorContext) => (
     <ImportsTempl imports={ctx.imports}>
       <templ>
         {`import * as grpcWeb from "grpc-web"`}
-        {`import * jspb from "google-protobuf"`}
+        {`import * as jspb from "google-protobuf"`}
       </templ>
     </ImportsTempl>
     <ln/>

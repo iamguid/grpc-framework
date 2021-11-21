@@ -18,7 +18,7 @@ var _default = ctx => "" + ("" + (0, _header.default)({
   "fileName": ctx.wrapper.fileName
 }, [])) + ("" + "" + "\n") + ("" + (0, _imports.default)({
   "imports": ctx.imports
-}, ["" + ("" + `import * as grpcWeb from "grpc-web"` + "\n") + ("" + `import * jspb from "google-protobuf"` + "\n")])) + ("" + "" + "\n") + ("" + ClientsTempl({
+}, ["" + ("" + `import * as grpcWeb from "grpc-web"` + "\n") + ("" + `import * as jspb from "google-protobuf"` + "\n")])) + ("" + "" + "\n") + ("" + ClientsTempl({
   "clients": ctx.clients
 }, []));
 
