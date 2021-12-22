@@ -78,7 +78,7 @@ const MessageIfaceTempl = ({ message }: { message: Message }) => (
           case field.isOneof: {
             return (
               <templ>
-                {`${field.fieldName}: ${field.fieldType};`}
+                {`${field.fieldName}?: ${field.fieldType};`}
               </templ>
             )
           }
@@ -101,31 +101,56 @@ const MessageModelTempl = ({ message }: { message: Message }) => (
   <templ>
     {`export class ${message.modelName} implements ${message.ifaceName} extends jspb.Message {`}
     <indent>
-      {message.fields.map((field) => (
-        <templ>
-          {field.isMap ? (
-            <templ>
-              {`public get ${field.fieldName}(): Record<${field.mapType.keyType}, ${field.mapType.valueType}> {`}
-              <indent>{`return void;`}</indent>
-              {`}`}
-              <ln />
-              {`public set ${field.fieldName}(value: Record<${field.mapType.keyType}, ${field.mapType.valueType}>): void {`}
-              <indent>{`return void;`}</indent>
-              {`}`}
-            </templ>
-          ) : (
-            <templ>
-              {`public get ${field.fieldName}(): ${field.fieldType} {`}
-              <indent>{`return void;`}</indent>
-              {`}`}
-              <ln />
-              {`public set ${field.fieldName}(value: ${field.fieldType}): void {`}
-              <indent>{`return void;`}</indent>
-              {`}`}
-            </templ>
-          )}
-        </templ>
-      )).join("")}
+      {`contructor(opt_data: Array[]) {`}
+      <indent>
+        {`jspb.Message.initialize(this, opt_data, ${message.messageIndex}, $pivot$, $rptfields$, $oneoffields$);`}
+      </indent>
+      {`}`}
+      <ln/>
+      {message.fields.map((field) => {
+        switch (true) {
+          case field.isMap: {
+            return (
+              <templ>
+                {`public get ${field.fieldName}(): jspb.Map<${field.mapType.keyType}, ${field.mapType.valueType}> {`}
+                <indent>
+                  {`return jspb.Message.getMapField(this, ${field.fieldNumber}, false, null));`}
+                </indent>
+                {`}`}
+                <ln />
+              </templ>
+            )
+          }
+
+          case field.isOneof: {
+            return (
+              <templ>
+                {`public get ${field.fieldName}(): ${field.fieldType} {`}
+                <indent>{`return void;`}</indent>
+                {`}`}
+                <ln />
+                {`public set ${field.fieldName}(value: ${field.fieldType}): void {`}
+                <indent>{`return void;`}</indent>
+                {`}`}
+              </templ>
+            )
+          }
+
+          default: {
+            return (
+              <templ>
+                {`public get ${field.fieldName}(): ${field.fieldType} {`}
+                <indent>{`return void;`}</indent>
+                {`}`}
+                <ln />
+                {`public set ${field.fieldName}(value: ${field.fieldType}): void {`}
+                <indent>{`return void;`}</indent>
+                {`}`}
+              </templ>
+            )
+          }
+        }
+      }).join("")}
     </indent>
     {`}`}
   </templ>

@@ -65,8 +65,9 @@ export type MessageField = {
 }
 
 export type Message = {
-    ifaceName: string,
-    modelName: string,
+    ifaceName: string;
+    modelName: string;
+    messageIndex: number;
     fields: MessageField[];
     mesages: Message[];
     enums: Enum[];
@@ -157,6 +158,7 @@ export class ModelsFilesGenerator extends TSXTGenerator<ModelsFilesGeneratorCont
             const nestedMessages: Message[] = this.buildMessages(message.messages, dependencies);
 
             return {
+                messageIndex: message.index!,
                 ifaceName: `I${message.name}`,
                 modelName: message.name,
                 enums: nestedEnums,
