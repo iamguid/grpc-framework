@@ -6,18 +6,18 @@ import { WellKnownTypesFilesMap } from "../WellKnownTypesFilesMap";
 import { Dependencies, Dependency, Import } from "../BaseGeneratorTypes";
 
 const ProtobufTypeToTsType: {[key: string]: string} = {
-    "double": 'number', // bigint?
+    "double": 'number',
     "float": 'number',
     "int32": 'number',
-    "int64": 'number',
+    "int64": 'BigInt',
     "uint32": 'number',
-    "uint64": 'number',
+    "uint64": 'BigInt',
     "sint32": 'number',
-    "sint64": 'number',
+    "sint64": 'BigInt',
     "fixed32": 'number',
-    "fixed64": 'number',
+    "fixed64": 'BigInt',
     "sfixed32": 'number',
-    "sfixed64": 'number',
+    "sfixed64": 'BigInt',
     "enum": 'number',
     "bool": 'boolean',
     "string": 'string',
@@ -27,6 +27,7 @@ const ProtobufTypeToTsType: {[key: string]: string} = {
 export type MapType = {
     keyType: string;
     valueType: string;
+    valueTypeIsMessage: boolean;
 }
 
 export type EnumField = {
@@ -41,8 +42,10 @@ export type Enum = {
 
 export type MessageField = {
     fieldName: string;
+    fieldRawType: string;
     fieldType: string;
     fieldNumber: number;
+    isMessageType: boolean;
     isRepeated: boolean;
     isMap: boolean;
     isOneof: boolean;
@@ -126,13 +129,16 @@ export class ModelsFilesGenerator extends TSXTGenerator<ModelsFilesGeneratorCont
                     mapType = {
                         keyType: this.resolveType(dependencies, field.map.keyType),
                         valueType: this.resolveType(dependencies, field.map.valueType),
+                        valueTypeIsMessage: !(field.map.valueType in ProtobufTypeToTsType)
                     }
                 }
 
                 return {
                     fieldName: lowerCaseFirst(field.name),
                     fieldNumber: field.fieldNumber,
+                    fieldRawType: field.type,
                     fieldType: Boolean(field.type) ? this.resolveType(dependencies, field.type) : "",
+                    isMessageType: !(field.type in ProtobufTypeToTsType),
                     isMap: Boolean(field.map),
                     isOneof: Boolean(field.oneofName),
                     isRepeated: field.repeated,

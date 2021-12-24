@@ -11,22 +11,58 @@ const getRepeatedFieldsArray = (message: Message): number[] => {
   return message.fields.filter(field => field.isRepeated).map(field => field.fieldNumber);
 }
 
-const getOneofGroupsArray = (message: Message): number[][] => {
-  const groupedOnofFieldsByOneofName = message.fields
+const getOneofGroups = (message: Message): {name: string; fields: number[]}[] => {
+  return message.fields
     .filter(field => field.isOneof)
     .reduce((accum, field) => {
-      if (!accum[field.oneofName!]) {
-        accum[field.oneofName!] = []
+      if (accum.findIndex(group => group.name === field.oneofName) === -1) {
+        accum.push({name: field.oneofName, fields: []})
       }
-
-      accum[field.oneofName!].push(field.fieldNumber)
+      const currentGroup = accum.find(group => group.name === field.oneofName)
+      currentGroup.fields.push(field.fieldNumber);
       return accum;
-    }, {} as Record<string, number[]>);
+    }, [] as {name: string; fields: number[]}[]);
+}
 
-    return Object.entries(groupedOnofFieldsByOneofName)
-      .map(([key, value]) => {
-        return [...value]
-      });
+const getOneofGroupsArray = (message: Message): number[][] => {
+  return getOneofGroups(message)
+    .map(groups => {
+      return [...groups.fields]
+    });
+}
+
+const getOneofGroupsArrayIndex = (message: Message, oneofName: string): number => {
+  return getOneofGroups(message)
+    .findIndex(group => group.name === oneofName)
+}
+
+const fieldDefault = (field: MessageField) => {
+  if (field.isRepeated) {
+    return "[]";
+  }
+  
+  if (field.isMessageType) {
+    return "null";
+  }
+
+  switch (field.fieldRawType) {
+    case "int32":
+    case "uint32":
+    case "float":
+    case "double":
+      return "0";
+    case "int64":
+    case "uint64":
+      return "0n"
+    case "bool":
+      return "false";
+    case "string":
+      return "\"\"";
+    case "bytes":
+      return "new Uint8Array()"
+  }
+
+  throw new Error(`Cannot get default JS type ${field.fieldRawType}`)
 }
 
 export default (ctx: ModelsFilesGeneratorContext) => (
@@ -130,6 +166,70 @@ const renderOneofGroupsArray = (groups: number[][]) => {
   return `[${result.join(', ')}]`;
 }
 
+const MessageFieldGetterBody = ({ field }: { field: MessageField }) => {
+  let useDefault = true;
+
+  // Repeated fields get initialized to their default in the constructor
+  // (why?), so we emit a plain getField() call for them.
+  if (field.isRepeated) {
+    useDefault = false;
+  }
+
+  const isBoolean = field.fieldRawType == "bool";
+  const isFloatOrDouble =
+      field.fieldRawType == "float" ||
+      field.fieldRawType == "double";
+
+  const cardinality = field.isRepeated ? "Repeated" : "";
+  const withDefault = useDefault ? "WithDefault" : "";
+  const defaultArg = useDefault ? fieldDefault(field) : "";
+
+  let type = "";
+  if (isFloatOrDouble) {
+    type = "FloatingPoint";
+  }
+  if (isBoolean) {
+    type = "Boolean";
+  }
+
+  // Prints the appropriate function, among:
+  // - getField
+  // - getBooleanField
+  // - getFloatingPointField => Replaced by getOptionalFloatingPointField to
+  //   preserve backward compatibility.
+  // - getFieldWithDefault
+  // - getBooleanFieldWithDefault
+  // - getFloatingPointFieldWithDefault
+  // - getRepeatedField
+  // - getRepeatedBooleanField
+  // - getRepeatedFloatingPointField
+  if (isFloatOrDouble && !field.isRepeated && !useDefault) {
+    return (
+      <templ>
+        {`return jspb.Message.getOptionalFloatingPointField(`}
+        <indent>
+          {`this,`}
+          {`${field.fieldNumber}`}
+        </indent>
+        {`)`}
+      </templ>
+    )
+  } else {
+
+    return (
+      <templ>
+        {`return jspb.Message.get${cardinality}${type}Field${withDefault}(`}
+        <indent>
+          {`this,`}
+          {`${field.fieldNumber},`}
+          {`${defaultArg}`}
+        </indent>
+        {`)`}
+      </templ>
+    )
+  }
+}
+
 const MessageModelTempl = ({ message }: { message: Message }) => {
   const repeatedFieldsArray = getRepeatedFieldsArray(message);
   const oneofGroupsArray = getOneofGroupsArray(message);
@@ -150,7 +250,7 @@ const MessageModelTempl = ({ message }: { message: Message }) => {
             {`0,`}
             {`${message.pivot},`}
             {repeatedFieldsArray.length > 0 ? `${message.modelName}.repeatedFields,` : `null,`}
-            {oneofGroupsArray.length > 0 ? `${message.modelName}.oneofFieldsGroups,` : `null,`}
+            {oneofGroupsArray.length > 0 ? `${message.modelName}.oneofFieldsGroups` : `null`}
           </indent>
           {`)`}
         </indent>
@@ -163,7 +263,14 @@ const MessageModelTempl = ({ message }: { message: Message }) => {
                 <templ>
                   {`public get ${field.fieldName}(): jspb.Map<${field.mapType.keyType}, ${field.mapType.valueType}> {`}
                   <indent>
-                    {`return jspb.Message.getMapField(this, ${field.fieldNumber}, false, null));`}
+                    {`return jspb.Message.getMapField(`}
+                    <indent>
+                      {`this,`} 
+                      {`${field.fieldNumber},`}
+                      {`false,`}
+                      {field.mapType.valueTypeIsMessage ? field.mapType.valueType : 'null'}
+                    </indent>
+                    {`);`}
                   </indent>
                   {`}`}
                   <ln />
@@ -171,25 +278,45 @@ const MessageModelTempl = ({ message }: { message: Message }) => {
               )
             }
 
-            case field.isOneof: {
+            case field.isMessageType: {
               return (
                 <templ>
                   {`public get ${field.fieldName}(): ${field.fieldType} {`}
-                  <indent>{`return void;`}</indent>
+                  <indent>
+                    {`return jspb.Message.get${field.isRepeated ? 'Repeated' : ''}WrapperField(`}
+                    <indent>
+                      {`this,`}
+                      {`${field.fieldType},`}
+                      {`${field.fieldNumber}`}
+                    </indent>
+                    {`);`}
+                  </indent>
                   {`}`}
                   <ln />
                   {`public set ${field.fieldName}(value: ${field.fieldType}): void {`}
-                  <indent>{`return void;`}</indent>
+                  <indent>
+                    {`return jspb.Message.set${field.isOneof ? 'Oneof' : ''}${field.isRepeated ? 'Repeated' : ''}WrapperField(`},
+                    <indent>
+                      {`this,`}
+                      {`${field.fieldNumber},`}
+                      {field.oneofName ? `${message.modelName}.oneofFieldsGroups[${getOneofGroupsArrayIndex(message, field.oneofName)}],` : ''}
+                      {`value`}
+                    </indent>
+                    {`)`}
+                  </indent>
                   {`}`}
                 </templ>
               )
             }
 
             default: {
+
               return (
                 <templ>
                   {`public get ${field.fieldName}(): ${field.fieldType} {`}
-                  <indent>{`return void;`}</indent>
+                  <indent>
+                    <MessageFieldGetterBody field={field}/>
+                  </indent>
                   {`}`}
                   <ln />
                   {`public set ${field.fieldName}(value: ${field.fieldType}): void {`}
