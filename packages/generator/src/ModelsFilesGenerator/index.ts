@@ -1,8 +1,9 @@
+import { EnumDescriptor, MessageDescriptor } from "@grpc-web-framework/parser";
 import { buildNamespace, filePathToPseudoNamespace, getPathToRoot, lowerCaseFirst, replaceProtoSuffix } from "../utils";
 import { ITSXTGeneratorInput, TSXTGenerator } from "../TSXTGenerator";
 import { FileDescriptorWrapper } from "../FileDescriptorWrapper";
 import { WellKnownTypesFilesMap } from "../WellKnownTypesFilesMap";
-import { EnumDescriptor, MessageDescriptor } from "@grpc-web-framework/parser";
+import { Dependencies, Dependency, Import } from "../BaseGeneratorTypes";
 
 const ProtobufTypeToTsType: {[key: string]: string} = {
     "double": 'number', // bigint?
@@ -22,21 +23,6 @@ const ProtobufTypeToTsType: {[key: string]: string} = {
     "string": 'string',
     "bytes": 'Uint8Array',
 };
-
-export type Import = {
-    name: string;
-    path: string;
-}
-
-export type Dependency = {
-    import: Import;
-    typePath: string;
-}
-
-export type Dependencies = {
-    imports: Import[];
-    deps: Map<string, Dependency>;
-}
 
 export type MapType = {
     keyType: string;

@@ -35,15 +35,49 @@ const MessagesRecursiveTempl = ({
   "enums": message.enums
 }, [])))) + ("" + `}` + "\n") : ""))).join("")) + ("" + "" + "\n") + ("" + enums.map(enm => "" + ("" + EnumTempl({
   "enm": enm
-}, []))).join(""));
+}, []))).join("")) + ("" + "" + "\n");
 
 const MessageIfaceTempl = ({
   message
-}) => "" + ("" + `export interface ${message.ifaceName} {` + "\n") + ("" + ("" + ("" + message.fields.map(field => "" + ("" + (field.isMap ? "" + ("\xA0\xA0\xA0\xA0" + `${field.fieldName}: Record<${field.mapType.keyType}, ${field.mapType.valueType}>;` + "\n") : "" + ("\xA0\xA0\xA0\xA0" + `${field.fieldName}: ${field.fieldType};` + "\n")))).join("")))) + ("" + `}` + "\n");
+}) => "" + ("" + `export interface ${message.ifaceName} {` + "\n") + ("" + ("" + ("" + message.fields.map(field => {
+  switch (true) {
+    case field.isMap:
+      {
+        return "" + ("\xA0\xA0\xA0\xA0" + `${field.fieldName}: Record<${field.mapType.keyType}, ${field.mapType.valueType}>;` + "\n");
+      }
+
+    case field.isOneof:
+      {
+        return "" + ("\xA0\xA0\xA0\xA0" + `${field.fieldName}?: ${field.fieldType};` + "\n");
+      }
+
+    default:
+      {
+        return "" + ("\xA0\xA0\xA0\xA0" + `${field.fieldName}: ${field.fieldType};` + "\n");
+      }
+  }
+}).join("")))) + ("" + `}` + "\n");
 
 const MessageModelTempl = ({
   message
-}) => "" + ("" + `export class ${message.modelName} implements ${message.ifaceName} extends jspb.Message {` + "\n") + ("" + ("" + ("" + message.fields.map(field => "" + ("" + (field.isMap ? "" + ("\xA0\xA0\xA0\xA0" + `public get ${field.fieldName}(): Record<${field.mapType.keyType}, ${field.mapType.valueType}> {` + "\n") + ("" + ("" + ("\xA0\xA0\xA0\xA0\xA0\xA0\xA0\xA0" + `return void;` + "\n"))) + ("\xA0\xA0\xA0\xA0" + `}` + "\n") + ("\xA0\xA0\xA0\xA0" + "" + "\n") + ("\xA0\xA0\xA0\xA0" + `public set ${field.fieldName}(value: Record<${field.mapType.keyType}, ${field.mapType.valueType}>): void {` + "\n") + ("" + ("" + ("\xA0\xA0\xA0\xA0\xA0\xA0\xA0\xA0" + `return void;` + "\n"))) + ("\xA0\xA0\xA0\xA0" + `}` + "\n") : "" + ("\xA0\xA0\xA0\xA0" + `public get ${field.fieldName}(): ${field.fieldType} {` + "\n") + ("" + ("" + ("\xA0\xA0\xA0\xA0\xA0\xA0\xA0\xA0" + `return void;` + "\n"))) + ("\xA0\xA0\xA0\xA0" + `}` + "\n") + ("\xA0\xA0\xA0\xA0" + "" + "\n") + ("\xA0\xA0\xA0\xA0" + `public set ${field.fieldName}(value: ${field.fieldType}): void {` + "\n") + ("" + ("" + ("\xA0\xA0\xA0\xA0\xA0\xA0\xA0\xA0" + `return void;` + "\n"))) + ("\xA0\xA0\xA0\xA0" + `}` + "\n")))).join("")))) + ("" + `}` + "\n");
+}) => "" + ("" + `export class ${message.modelName} implements ${message.ifaceName} extends jspb.Message {` + "\n") + ("" + ("" + ("\xA0\xA0\xA0\xA0" + `contructor(opt_data: Array[]) {` + "\n") + ("" + ("" + ("\xA0\xA0\xA0\xA0\xA0\xA0\xA0\xA0" + `jspb.Message.initialize(this, opt_data, ${message.messageIndex}, $pivot$, $rptfields$, $oneoffields$);` + "\n"))) + ("\xA0\xA0\xA0\xA0" + `}` + "\n") + ("\xA0\xA0\xA0\xA0" + "" + "\n") + ("" + message.fields.map(field => {
+  switch (true) {
+    case field.isMap:
+      {
+        return "" + ("\xA0\xA0\xA0\xA0" + `public get ${field.fieldName}(): jspb.Map<${field.mapType.keyType}, ${field.mapType.valueType}> {` + "\n") + ("" + ("" + ("\xA0\xA0\xA0\xA0\xA0\xA0\xA0\xA0" + `return jspb.Message.getMapField(this, ${field.fieldNumber}, false, null));` + "\n"))) + ("\xA0\xA0\xA0\xA0" + `}` + "\n") + ("\xA0\xA0\xA0\xA0" + "" + "\n");
+      }
+
+    case field.isOneof:
+      {
+        return "" + ("\xA0\xA0\xA0\xA0" + `public get ${field.fieldName}(): ${field.fieldType} {` + "\n") + ("" + ("" + ("\xA0\xA0\xA0\xA0\xA0\xA0\xA0\xA0" + `return void;` + "\n"))) + ("\xA0\xA0\xA0\xA0" + `}` + "\n") + ("\xA0\xA0\xA0\xA0" + "" + "\n") + ("\xA0\xA0\xA0\xA0" + `public set ${field.fieldName}(value: ${field.fieldType}): void {` + "\n") + ("" + ("" + ("\xA0\xA0\xA0\xA0\xA0\xA0\xA0\xA0" + `return void;` + "\n"))) + ("\xA0\xA0\xA0\xA0" + `}` + "\n");
+      }
+
+    default:
+      {
+        return "" + ("\xA0\xA0\xA0\xA0" + `public get ${field.fieldName}(): ${field.fieldType} {` + "\n") + ("" + ("" + ("\xA0\xA0\xA0\xA0\xA0\xA0\xA0\xA0" + `return void;` + "\n"))) + ("\xA0\xA0\xA0\xA0" + `}` + "\n") + ("\xA0\xA0\xA0\xA0" + "" + "\n") + ("\xA0\xA0\xA0\xA0" + `public set ${field.fieldName}(value: ${field.fieldType}): void {` + "\n") + ("" + ("" + ("\xA0\xA0\xA0\xA0\xA0\xA0\xA0\xA0" + `return void;` + "\n"))) + ("\xA0\xA0\xA0\xA0" + `}` + "\n");
+      }
+  }
+}).join("")))) + ("" + `}` + "\n");
 
 const EnumTempl = ({
   enm

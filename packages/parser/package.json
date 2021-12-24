@@ -8,6 +8,8 @@
   "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "clean": "rm -rf lib",
+    "build": "npm run clean && npm run build:lib",
     "build:lib": "tsc",
     "build:antlr": "antlr4ts -visitor Protobuf3.g4 -o ./src/generated"
   },
