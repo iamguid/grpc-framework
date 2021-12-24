@@ -1241,10 +1241,10 @@ babel-plugin-polyfill-regenerator@^0.2.3:
   dependencies:
     "@babel/helper-define-polyfill-provider" "^0.2.4"
 
-babel-plugin-tsxt@1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/babel-plugin-tsxt/-/babel-plugin-tsxt-1.1.0.tgz#2fe67e6a4303c2d41bb5f0bd1e931560d65afe7b"
-  integrity sha512-lV7l95odsEEibPorXWeDbQMe2Gm6AoOg0+oT7Ncc9uXskMLp0ZB3P0YXLM4HMZwkET517MA3AK8tkgAZ0X4OPw==
+babel-plugin-tsxt@1.3.8:
+  version "1.3.8"
+  resolved "https://registry.yarnpkg.com/babel-plugin-tsxt/-/babel-plugin-tsxt-1.3.8.tgz#ba3258b089f501a15d0bbab6ffab2e2278ee68a4"
+  integrity sha512-FoKFbxkSLu6fRGZtLjHi9q7r4XiNY83ofP8bkGM8W3VEtJwVLkyN0/w+k+D5ecCjTeQYj3Un/FVZYDyjqYZiOA==
   dependencies:
     "@babel/code-frame" "7.16.0"
     "@babel/core" "7.16.0"

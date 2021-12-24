@@ -13,10 +13,11 @@ export interface WalkByFilesProps<T> extends WalkByFiles<T> {
 
 export const walkByFiles = <T>({ basePath, filePath, each, result }: WalkByFilesProps<T>): T => {
     const filesDir = fs.readdirSync(path.join(basePath, filePath));
+    console.log(filesDir);
 
     for (const item of filesDir) {
-      const fullFilePath = path.join(basePath, filePath, item);
-      const isDirectory = fs.statSync(fullFilePath).isDirectory();
+      const fullPath = path.join(basePath, filePath, item);
+      const isDirectory = fs.statSync(fullPath).isDirectory();
 
       isDirectory 
         ? walkByFiles({ each, result, basePath, filePath: path.join(filePath, item) }) 

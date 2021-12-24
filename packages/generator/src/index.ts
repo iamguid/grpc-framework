@@ -77,7 +77,8 @@ const generate = (opts: { protoDir: string, outDir: string }) => {
 
     fs.mkdirSync(outDir, { recursive: true });
     for (const result of generatedResult) {
-        fs.writeFileSync(path.join(outDir, result.fileName), result.content);
+        fs.mkdirSync(path.join(outDir, path.dirname(result.fileName)), { recursive: true });
+        fs.writeFileSync(path.join(outDir, result.fileName), result.content, {  });
     }
 }
 
