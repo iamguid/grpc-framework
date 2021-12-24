@@ -2,21 +2,7 @@ import { buildNamespace, filePathToPseudoNamespace, getPathToRoot, lowerCaseFirs
 import { ITSXTGeneratorInput, TSXTGenerator } from "../TSXTGenerator";
 import { FileDescriptorWrapper } from "../FileDescriptorWrapper";
 import { WellKnownTypesFilesMap } from "../WellKnownTypesFilesMap";
-
-export type Import = {
-    name: string;
-    path: string;
-}
-
-export type Dependency = {
-    import: Import;
-    typePath: string;
-}
-
-export type Dependencies = {
-    imports: Import[];
-    deps: Map<string, Dependency>;
-}
+import { Dependency, Import } from "../BaseGeneratorTypes";
 
 export type ServiceClient = {
     interfaceClassName: string;

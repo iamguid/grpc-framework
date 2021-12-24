@@ -1,4 +1,4 @@
-import { EnumDescriptor, MessageDescriptor } from "@grpc-web-framework/parser";
+import { EnumDescriptor, FieldDescriptor, MessageDescriptor } from "@grpc-web-framework/parser";
 import { buildNamespace, filePathToPseudoNamespace, getPathToRoot, lowerCaseFirst, replaceProtoSuffix } from "../utils";
 import { ITSXTGeneratorInput, TSXTGenerator } from "../TSXTGenerator";
 import { FileDescriptorWrapper } from "../FileDescriptorWrapper";
@@ -54,6 +54,7 @@ export type Message = {
     ifaceName: string;
     modelName: string;
     messageIndex: number;
+    pivot: number;
     fields: MessageField[];
     mesages: Message[];
     enums: Enum[];
@@ -147,6 +148,7 @@ export class ModelsFilesGenerator extends TSXTGenerator<ModelsFilesGeneratorCont
                 messageIndex: message.index!,
                 ifaceName: `I${message.name}`,
                 modelName: message.name,
+                pivot: this.getPivot(message),
                 enums: nestedEnums,
                 mesages: nestedMessages,
                 fields: fileds,
@@ -210,5 +212,26 @@ export class ModelsFilesGenerator extends TSXTGenerator<ModelsFilesGeneratorCont
             imports: Array.from(imports.values()),
             deps: dependencies
         };
+    }
+
+    // Returns the max index in the underlying data storage array beyond which the
+    // extension object is used.
+    private getPivot(messageDescriptor: MessageDescriptor): number {
+        const kDefaultPivot = 500;
+
+        // Find the max field number
+        let maxFieldNumber = 0;
+        for (let i = 0; i < messageDescriptor.fields.length; i++) {
+            if (messageDescriptor.fields[i].fieldNumber > maxFieldNumber) {
+                maxFieldNumber = messageDescriptor.fields[i].fieldNumber;
+            }
+        }
+
+        let pivot = -1;
+        if (maxFieldNumber >= kDefaultPivot) {
+            pivot = ((maxFieldNumber + 1) < kDefaultPivot) ? (maxFieldNumber + 1) : kDefaultPivot;
+        }
+
+        return pivot;
     }
 }

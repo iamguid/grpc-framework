@@ -1,10 +1,33 @@
 import {
   Enum,
   Message,
+  MessageField,
   ModelsFilesGeneratorContext,
 } from "../src/ModelsFilesGenerator";
 import HeaderTempl from "./header.template";
 import ImportsTempl from "./imports.template";
+
+const getRepeatedFieldsArray = (message: Message): number[] => {
+  return message.fields.filter(field => field.isRepeated).map(field => field.fieldNumber);
+}
+
+const getOneofGroupsArray = (message: Message): number[][] => {
+  const groupedOnofFieldsByOneofName = message.fields
+    .filter(field => field.isOneof)
+    .reduce((accum, field) => {
+      if (!accum[field.oneofName!]) {
+        accum[field.oneofName!] = []
+      }
+
+      accum[field.oneofName!].push(field.fieldNumber)
+      return accum;
+    }, {} as Record<string, number[]>);
+
+    return Object.entries(groupedOnofFieldsByOneofName)
+      .map(([key, value]) => {
+        return [...value]
+      });
+}
 
 export default (ctx: ModelsFilesGeneratorContext) => (
   <templ>
@@ -97,64 +120,91 @@ const MessageIfaceTempl = ({ message }: { message: Message }) => (
   </templ>
 );
 
-const MessageModelTempl = ({ message }: { message: Message }) => (
-  <templ>
-    {`export class ${message.modelName} implements ${message.ifaceName} extends jspb.Message {`}
-    <indent>
-      {`contructor(opt_data: Array[]) {`}
+const renderOneofGroupsArray = (groups: number[][]) => {
+  let result: string[] = [];
+
+  for (const group of groups) {
+    result.push(`[${group.join(', ')}]`);
+  }
+
+  return `[${result.join(', ')}]`;
+}
+
+const MessageModelTempl = ({ message }: { message: Message }) => {
+  const repeatedFieldsArray = getRepeatedFieldsArray(message);
+  const oneofGroupsArray = getOneofGroupsArray(message);
+
+  return (
+    <templ>
+      {`export class ${message.modelName} implements ${message.ifaceName} extends jspb.Message {`}
       <indent>
-        {`jspb.Message.initialize(this, opt_data, ${message.messageIndex}, $pivot$, $rptfields$, $oneoffields$);`}
+        {`private static repeatedFields: number[] = [${repeatedFieldsArray.join(', ')}];`}
+        {`private static oneofFieldsGroups: number[] = ${renderOneofGroupsArray(oneofGroupsArray)};`}
+        <ln/>
+        {`contructor(opt_data: any) {`}
+        <indent>
+          {`jspb.Message.initialize(`}
+          <indent>
+            {`this,`}
+            {`opt_data,`}
+            {`0,`}
+            {`${message.pivot},`}
+            {repeatedFieldsArray.length > 0 ? `${message.modelName}.repeatedFields,` : `null,`}
+            {oneofGroupsArray.length > 0 ? `${message.modelName}.oneofFieldsGroups,` : `null,`}
+          </indent>
+          {`)`}
+        </indent>
+        {`}`}
+        <ln/>
+        {message.fields.map((field) => {
+          switch (true) {
+            case field.isMap: {
+              return (
+                <templ>
+                  {`public get ${field.fieldName}(): jspb.Map<${field.mapType.keyType}, ${field.mapType.valueType}> {`}
+                  <indent>
+                    {`return jspb.Message.getMapField(this, ${field.fieldNumber}, false, null));`}
+                  </indent>
+                  {`}`}
+                  <ln />
+                </templ>
+              )
+            }
+
+            case field.isOneof: {
+              return (
+                <templ>
+                  {`public get ${field.fieldName}(): ${field.fieldType} {`}
+                  <indent>{`return void;`}</indent>
+                  {`}`}
+                  <ln />
+                  {`public set ${field.fieldName}(value: ${field.fieldType}): void {`}
+                  <indent>{`return void;`}</indent>
+                  {`}`}
+                </templ>
+              )
+            }
+
+            default: {
+              return (
+                <templ>
+                  {`public get ${field.fieldName}(): ${field.fieldType} {`}
+                  <indent>{`return void;`}</indent>
+                  {`}`}
+                  <ln />
+                  {`public set ${field.fieldName}(value: ${field.fieldType}): void {`}
+                  <indent>{`return void;`}</indent>
+                  {`}`}
+                </templ>
+              )
+            }
+          }
+        }).join("")}
       </indent>
       {`}`}
-      <ln/>
-      {message.fields.map((field) => {
-        switch (true) {
-          case field.isMap: {
-            return (
-              <templ>
-                {`public get ${field.fieldName}(): jspb.Map<${field.mapType.keyType}, ${field.mapType.valueType}> {`}
-                <indent>
-                  {`return jspb.Message.getMapField(this, ${field.fieldNumber}, false, null));`}
-                </indent>
-                {`}`}
-                <ln />
-              </templ>
-            )
-          }
-
-          case field.isOneof: {
-            return (
-              <templ>
-                {`public get ${field.fieldName}(): ${field.fieldType} {`}
-                <indent>{`return void;`}</indent>
-                {`}`}
-                <ln />
-                {`public set ${field.fieldName}(value: ${field.fieldType}): void {`}
-                <indent>{`return void;`}</indent>
-                {`}`}
-              </templ>
-            )
-          }
-
-          default: {
-            return (
-              <templ>
-                {`public get ${field.fieldName}(): ${field.fieldType} {`}
-                <indent>{`return void;`}</indent>
-                {`}`}
-                <ln />
-                {`public set ${field.fieldName}(value: ${field.fieldType}): void {`}
-                <indent>{`return void;`}</indent>
-                {`}`}
-              </templ>
-            )
-          }
-        }
-      }).join("")}
-    </indent>
-    {`}`}
-  </templ>
-);
+    </templ>
+  )
+};
 
 const EnumTempl = ({ enm }: { enm: Enum }) => (
   <templ>
