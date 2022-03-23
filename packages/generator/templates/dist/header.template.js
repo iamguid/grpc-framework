@@ -28,24 +28,6 @@ if (typeof globalThis.__tsxt__ === "undefined") {
 var _default = ({
   packageName,
   fileName
-}) => "" + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
-  const expr = `// @ts-nocheck`;
-  return Array.isArray(expr) ? expr.join('') : expr;
-})() + "\n") + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
-  const expr = `//`;
-  return Array.isArray(expr) ? expr.join('') : expr;
-})() + "\n") + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
-  const expr = `// GENERATED CODE -- DO NOT EDIT!`;
-  return Array.isArray(expr) ? expr.join('') : expr;
-})() + "\n") + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
-  const expr = `//`;
-  return Array.isArray(expr) ? expr.join('') : expr;
-})() + "\n") + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
-  const expr = `// package: ${packageName}`;
-  return Array.isArray(expr) ? expr.join('') : expr;
-})() + "\n") + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
-  const expr = `// file: ${fileName}`;
-  return Array.isArray(expr) ? expr.join('') : expr;
-})() + "\n");
+}) => "" + (" ".repeat(globalThis.__tsxt__.indent * 4) + `// @ts-nocheck` + "\n") + (" ".repeat(globalThis.__tsxt__.indent * 4) + `//` + "\n") + (" ".repeat(globalThis.__tsxt__.indent * 4) + `// GENERATED CODE -- DO NOT EDIT!` + "\n") + (" ".repeat(globalThis.__tsxt__.indent * 4) + `//` + "\n") + (" ".repeat(globalThis.__tsxt__.indent * 4) + `// package: ${packageName}` + "\n") + (" ".repeat(globalThis.__tsxt__.indent * 4) + `// file: ${fileName}` + "\n");
 
 exports.default = _default;

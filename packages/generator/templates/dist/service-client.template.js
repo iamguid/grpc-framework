@@ -31,146 +31,98 @@ if (typeof globalThis.__tsxt__ === "undefined") {
   };
 }
 
-var _default = ctx => "" + ("" + (() => {
+var _default = ctx => "" + (() => {
   const expr = (0, _header.default)({
     "packageName": ctx.wrapper.file.package,
     "fileName": ctx.wrapper.fileName
   }, []);
   return Array.isArray(expr) ? expr.join('') : expr;
-})()) + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
-  const expr = "";
-  return Array.isArray(expr) ? expr.join('') : expr;
-})() + "\n") + ("" + (() => {
+})() + (" ".repeat(globalThis.__tsxt__.indent * 4) + "" + "\n") + (() => {
   const expr = (0, _imports.default)({
     "imports": ctx.imports
-  }, ["" + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
-    const expr = `import * as grpcWeb from "grpc-web"`;
-    return Array.isArray(expr) ? expr.join('') : expr;
-  })() + "\n") + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
-    const expr = `import * as jspb from "google-protobuf"`;
-    return Array.isArray(expr) ? expr.join('') : expr;
-  })() + "\n")]);
+  }, ["" + (" ".repeat(globalThis.__tsxt__.indent * 4) + `import * as grpcWeb from "grpc-web"` + "\n") + (" ".repeat(globalThis.__tsxt__.indent * 4) + `import * as jspb from "google-protobuf"` + "\n")]);
   return Array.isArray(expr) ? expr.join('') : expr;
-})()) + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
-  const expr = "";
-  return Array.isArray(expr) ? expr.join('') : expr;
-})() + "\n") + ("" + (() => {
+})() + (" ".repeat(globalThis.__tsxt__.indent * 4) + "" + "\n") + (() => {
   const expr = ClientsTempl({
     "clients": ctx.clients
   }, []);
   return Array.isArray(expr) ? expr.join('') : expr;
-})());
+})();
 
 exports.default = _default;
 
 const ClientsTempl = ({
   clients
-}) => "" + ("" + (() => {
-  const expr = clients.map(client => "" + ("" + (() => {
+}) => "" + (() => {
+  const expr = clients.map(client => "" + (() => {
     const expr = ClientInterfaceTempl({
       "client": client
     }, []);
     return Array.isArray(expr) ? expr.join('') : expr;
-  })()) + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
-    const expr = "";
-    return Array.isArray(expr) ? expr.join('') : expr;
-  })() + "\n") + ("" + (() => {
+  })() + (" ".repeat(globalThis.__tsxt__.indent * 4) + "" + "\n") + (() => {
     const expr = ClientClassTempl({
       "client": client
     }, []);
     return Array.isArray(expr) ? expr.join('') : expr;
-  })()) + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
-    const expr = "";
-    return Array.isArray(expr) ? expr.join('') : expr;
-  })() + "\n"));
+  })() + (" ".repeat(globalThis.__tsxt__.indent * 4) + "" + "\n"));
   return Array.isArray(expr) ? expr.join('') : expr;
-})());
+})();
 
 const ClientInterfaceTempl = ({
   client
-}) => "" + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
-  const expr = `export interface ${client.interfaceClassName} {`;
-  return Array.isArray(expr) ? expr.join('') : expr;
-})() + "\n") + ("" + (() => {
-  const expr = "" + ("" + (() => {
+}) => "" + (" ".repeat(globalThis.__tsxt__.indent * 4) + `export interface ${client.interfaceClassName} {` + "\n") + (() => {
+  const expr = "" + (() => {
     const expr = (() => {
       globalThis.__tsxt__.indent++;
       return "";
     })();
 
     return Array.isArray(expr) ? expr.join('') : expr;
-  })()) + ("" + (() => {
-    const expr = client.methods.map(client => client.isServerStreaming ? "" + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
-      const expr = `${client.methodName}: (request: ${client.inputType}, metadata: grpcWeb.Metadata) => grpcWeb.ClientReadableStream<${client.outputType}>;`;
-      return Array.isArray(expr) ? expr.join('') : expr;
-    })() + "\n") : "" + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
-      const expr = `${client.methodName}: (request: ${client.inputType}, metadata: grpcWeb.Metadata) => Promise<${client.outputType}>;`;
-      return Array.isArray(expr) ? expr.join('') : expr;
-    })() + "\n")).join("");
+  })() + (() => {
+    const expr = client.methods.map(client => client.isServerStreaming ? "" + (" ".repeat(globalThis.__tsxt__.indent * 4) + `${client.methodName}: (request: ${client.inputType}, metadata: grpcWeb.Metadata) => grpcWeb.ClientReadableStream<${client.outputType}>;` + "\n") : "" + (" ".repeat(globalThis.__tsxt__.indent * 4) + `${client.methodName}: (request: ${client.inputType}, metadata: grpcWeb.Metadata) => Promise<${client.outputType}>;` + "\n")).join("");
     return Array.isArray(expr) ? expr.join('') : expr;
-  })()) + (() => {
+  })() + (() => {
     globalThis.__tsxt__.indent--;
     return "";
   })();
 
   return Array.isArray(expr) ? expr.join('') : expr;
-})()) + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
-  const expr = `}`;
-  return Array.isArray(expr) ? expr.join('') : expr;
-})() + "\n");
+})() + (" ".repeat(globalThis.__tsxt__.indent * 4) + `}` + "\n");
 
 const ClientClassTempl = ({
   client
-}) => "" + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
-  const expr = `export class ${client.clientClassName} extends ${client.interfaceClassName} {`;
-  return Array.isArray(expr) ? expr.join('') : expr;
-})() + "\n") + ("" + (() => {
-  const expr = "" + ("" + (() => {
+}) => "" + (" ".repeat(globalThis.__tsxt__.indent * 4) + `export class ${client.clientClassName} extends ${client.interfaceClassName} {` + "\n") + (() => {
+  const expr = "" + (() => {
     const expr = (() => {
       globalThis.__tsxt__.indent++;
       return "";
     })();
 
     return Array.isArray(expr) ? expr.join('') : expr;
-  })()) + ("" + (() => {
-    const expr = client.methods.map(client => "" + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
-      const expr = `public ${client.methodName}(request: ${client.inputType}, metadata: grpcWeb.Metadata) {`;
-      return Array.isArray(expr) ? expr.join('') : expr;
-    })() + "\n") + ("" + (() => {
-      const expr = "" + ("" + (() => {
+  })() + (() => {
+    const expr = client.methods.map(client => "" + (" ".repeat(globalThis.__tsxt__.indent * 4) + `public ${client.methodName}(request: ${client.inputType}, metadata: grpcWeb.Metadata) {` + "\n") + (() => {
+      const expr = "" + (() => {
         const expr = (() => {
           globalThis.__tsxt__.indent++;
           return "";
         })();
 
         return Array.isArray(expr) ? expr.join('') : expr;
-      })()) + ("" + (() => {
-        const expr = client.isServerStreaming ? "" + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
-          const expr = `retrun void;`;
-          return Array.isArray(expr) ? expr.join('') : expr;
-        })() + "\n") : "" + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
-          const expr = `retrun void;`;
-          return Array.isArray(expr) ? expr.join('') : expr;
-        })() + "\n");
+      })() + (() => {
+        const expr = client.isServerStreaming ? "" + (" ".repeat(globalThis.__tsxt__.indent * 4) + `retrun void;` + "\n") : "" + (" ".repeat(globalThis.__tsxt__.indent * 4) + `retrun void;` + "\n");
         return Array.isArray(expr) ? expr.join('') : expr;
-      })()) + (() => {
+      })() + (() => {
         globalThis.__tsxt__.indent--;
         return "";
       })();
 
       return Array.isArray(expr) ? expr.join('') : expr;
-    })()) + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
-      const expr = `}`;
-      return Array.isArray(expr) ? expr.join('') : expr;
-    })() + "\n")).join("");
+    })() + (" ".repeat(globalThis.__tsxt__.indent * 4) + `}` + "\n")).join("");
     return Array.isArray(expr) ? expr.join('') : expr;
-  })()) + (() => {
+  })() + (() => {
     globalThis.__tsxt__.indent--;
     return "";
   })();
 
   return Array.isArray(expr) ? expr.join('') : expr;
-})()) + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
-  const expr = `}`;
-  return Array.isArray(expr) ? expr.join('') : expr;
-})() + "\n");
+})() + (" ".repeat(globalThis.__tsxt__.indent * 4) + `}` + "\n");

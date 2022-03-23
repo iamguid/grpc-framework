@@ -27,18 +27,12 @@ if (typeof globalThis.__tsxt__ === "undefined") {
 
 var _default = ({
   imports
-}, children) => "" + ("" + (() => {
+}, children) => "" + (() => {
   const expr = children;
   return Array.isArray(expr) ? expr.join('') : expr;
-})()) + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
-  const expr = "";
+})() + (" ".repeat(globalThis.__tsxt__.indent * 4) + "" + "\n") + (() => {
+  const expr = imports.map(imprt => "" + (" ".repeat(globalThis.__tsxt__.indent * 4) + `import * as ${imprt.name} from "${imprt.path}";` + "\n"));
   return Array.isArray(expr) ? expr.join('') : expr;
-})() + "\n") + ("" + (() => {
-  const expr = imports.map(imprt => "" + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
-    const expr = `import * as ${imprt.name} from "${imprt.path}";`;
-    return Array.isArray(expr) ? expr.join('') : expr;
-  })() + "\n"));
-  return Array.isArray(expr) ? expr.join('') : expr;
-})());
+})();
 
 exports.default = _default;
