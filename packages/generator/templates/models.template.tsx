@@ -109,13 +109,13 @@ const MessagesRecursiveTempl = ({
             <templ/>
           )}
       </templ>
-    )).join("")}
+    ))}
     <ln />
     {enums.map((enm) => (
       <templ>
         <EnumTempl enm={enm} />
       </templ>
-    )).join("")}
+    ))}
     <ln />
   </templ>
 );
@@ -150,7 +150,7 @@ const MessageIfaceTempl = ({ message }: { message: Message }) => (
             )
           }
         }
-      }).join("")}
+      })}
     </indent>
     {`}`}
   </templ>
@@ -326,7 +326,7 @@ const MessageModelTempl = ({ message }: { message: Message }) => {
               )
             }
           }
-        }).join("")}
+        })}
       </indent>
       {`}`}
     </templ>
@@ -339,7 +339,7 @@ const EnumTempl = ({ enm }: { enm: Enum }) => (
     <indent>
       {enm.fields.map((field) => (
         <templ>{`${field.fieldName} = ${field.fieldValue},`}</templ>
-      )).join("")}
+      ))}
     </indent>
     {`}`}
   </templ>

@@ -1,5 +1,5 @@
 import "babel-plugin-tsxt";
-import { Import } from "../src/IBaseTypes";
+import { Import } from "../src/BaseGeneratorTypes";
 
 export default ({ imports }: { imports: Import[] }, children: string[]) => (
     <templ>
@@ -10,6 +10,6 @@ export default ({ imports }: { imports: Import[] }, children: string[]) => (
             <templ>
                 {`import * as ${imprt.name} from "${imprt.path}";`}
             </templ>
-        )).join("")}
+        ))}
     </templ>
 );

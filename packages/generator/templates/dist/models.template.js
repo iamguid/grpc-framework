@@ -91,64 +91,155 @@ const fieldDefault = field => {
   throw new Error(`Cannot get default JS type ${field.fieldRawType}`);
 };
 
-var _default = ctx => "" + ("" + (0, _header.default)({
-  "packageName": ctx.wrapper.file.package,
-  "fileName": ctx.wrapper.fileName
-}, [])) + (" ".repeat(globalThis.__tsxt__.indent * 4) + "" + "\n") + ("" + (0, _imports.default)({
-  "imports": ctx.imports
-}, ["" + (" ".repeat(globalThis.__tsxt__.indent * 4) + `import * as jspb from "google-protobuf"` + "\n")])) + (" ".repeat(globalThis.__tsxt__.indent * 4) + "" + "\n") + ("" + MessagesRecursiveTempl({
-  "messages": ctx.messges,
-  "enums": ctx.enums
-}, []));
+var _default = ctx => "" + ("" + (() => {
+  const expr = (0, _header.default)({
+    "packageName": ctx.wrapper.file.package,
+    "fileName": ctx.wrapper.fileName
+  }, []);
+  return Array.isArray(expr) ? expr.join('') : expr;
+})()) + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
+  const expr = "";
+  return Array.isArray(expr) ? expr.join('') : expr;
+})() + "\n") + ("" + (() => {
+  const expr = (0, _imports.default)({
+    "imports": ctx.imports
+  }, ["" + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
+    const expr = `import * as jspb from "google-protobuf"`;
+    return Array.isArray(expr) ? expr.join('') : expr;
+  })() + "\n")]);
+  return Array.isArray(expr) ? expr.join('') : expr;
+})()) + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
+  const expr = "";
+  return Array.isArray(expr) ? expr.join('') : expr;
+})() + "\n") + ("" + (() => {
+  const expr = MessagesRecursiveTempl({
+    "messages": ctx.messges,
+    "enums": ctx.enums
+  }, []);
+  return Array.isArray(expr) ? expr.join('') : expr;
+})());
 
 exports.default = _default;
 
 const MessagesRecursiveTempl = ({
   messages,
   enums
-}) => "" + ("" + messages.map(message => "" + ("" + MessageIfaceTempl({
-  "message": message
-}, [])) + (" ".repeat(globalThis.__tsxt__.indent * 4) + "" + "\n") + ("" + MessageModelTempl({
-  "message": message
-}, [])) + (" ".repeat(globalThis.__tsxt__.indent * 4) + "" + "\n") + ("" + (message.mesages.length > 0 || message.enums.length > 0 ? "" + (" ".repeat(globalThis.__tsxt__.indent * 4) + `export namespace ${message.modelName} {` + "\n") + ("" + ("" + ("" + (() => {
-  globalThis.__tsxt__.indent++;
-  return "";
-})()) + ("" + MessagesRecursiveTempl({
-  "messages": message.mesages,
-  "enums": message.enums
-}, [])) + (() => {
-  globalThis.__tsxt__.indent--;
-  return "";
-})())) + (" ".repeat(globalThis.__tsxt__.indent * 4) + `}` + "\n") : ""))).join("")) + (" ".repeat(globalThis.__tsxt__.indent * 4) + "" + "\n") + ("" + enums.map(enm => "" + ("" + EnumTempl({
-  "enm": enm
-}, []))).join("")) + (" ".repeat(globalThis.__tsxt__.indent * 4) + "" + "\n");
+}) => "" + ("" + (() => {
+  const expr = messages.map(message => "" + ("" + (() => {
+    const expr = MessageIfaceTempl({
+      "message": message
+    }, []);
+    return Array.isArray(expr) ? expr.join('') : expr;
+  })()) + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
+    const expr = "";
+    return Array.isArray(expr) ? expr.join('') : expr;
+  })() + "\n") + ("" + (() => {
+    const expr = MessageModelTempl({
+      "message": message
+    }, []);
+    return Array.isArray(expr) ? expr.join('') : expr;
+  })()) + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
+    const expr = "";
+    return Array.isArray(expr) ? expr.join('') : expr;
+  })() + "\n") + ("" + (() => {
+    const expr = message.mesages.length > 0 || message.enums.length > 0 ? "" + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
+      const expr = `export namespace ${message.modelName} {`;
+      return Array.isArray(expr) ? expr.join('') : expr;
+    })() + "\n") + ("" + (() => {
+      const expr = "" + ("" + (() => {
+        const expr = (() => {
+          globalThis.__tsxt__.indent++;
+          return "";
+        })();
+
+        return Array.isArray(expr) ? expr.join('') : expr;
+      })()) + ("" + (() => {
+        const expr = MessagesRecursiveTempl({
+          "messages": message.mesages,
+          "enums": message.enums
+        }, []);
+        return Array.isArray(expr) ? expr.join('') : expr;
+      })()) + (() => {
+        globalThis.__tsxt__.indent--;
+        return "";
+      })();
+
+      return Array.isArray(expr) ? expr.join('') : expr;
+    })()) + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
+      const expr = `}`;
+      return Array.isArray(expr) ? expr.join('') : expr;
+    })() + "\n") : "";
+    return Array.isArray(expr) ? expr.join('') : expr;
+  })()));
+  return Array.isArray(expr) ? expr.join('') : expr;
+})()) + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
+  const expr = "";
+  return Array.isArray(expr) ? expr.join('') : expr;
+})() + "\n") + ("" + (() => {
+  const expr = enums.map(enm => "" + ("" + (() => {
+    const expr = EnumTempl({
+      "enm": enm
+    }, []);
+    return Array.isArray(expr) ? expr.join('') : expr;
+  })()));
+  return Array.isArray(expr) ? expr.join('') : expr;
+})()) + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
+  const expr = "";
+  return Array.isArray(expr) ? expr.join('') : expr;
+})() + "\n");
 
 const MessageIfaceTempl = ({
   message
-}) => "" + (" ".repeat(globalThis.__tsxt__.indent * 4) + `export interface ${message.ifaceName} {` + "\n") + ("" + ("" + ("" + (() => {
-  globalThis.__tsxt__.indent++;
-  return "";
-})()) + ("" + message.fields.map(field => {
-  switch (true) {
-    case field.isMap:
-      {
-        return "" + (" ".repeat(globalThis.__tsxt__.indent * 4) + `${field.fieldName}: Record<${field.mapType.keyType}, ${field.mapType.valueType}>;` + "\n");
-      }
+}) => "" + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
+  const expr = `export interface ${message.ifaceName} {`;
+  return Array.isArray(expr) ? expr.join('') : expr;
+})() + "\n") + ("" + (() => {
+  const expr = "" + ("" + (() => {
+    const expr = (() => {
+      globalThis.__tsxt__.indent++;
+      return "";
+    })();
 
-    case field.isOneof:
-      {
-        return "" + (" ".repeat(globalThis.__tsxt__.indent * 4) + `${field.fieldName}?: ${field.fieldType};` + "\n");
-      }
+    return Array.isArray(expr) ? expr.join('') : expr;
+  })()) + ("" + (() => {
+    const expr = message.fields.map(field => {
+      switch (true) {
+        case field.isMap:
+          {
+            return "" + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
+              const expr = `${field.fieldName}: Record<${field.mapType.keyType}, ${field.mapType.valueType}>;`;
+              return Array.isArray(expr) ? expr.join('') : expr;
+            })() + "\n");
+          }
 
-    default:
-      {
-        return "" + (" ".repeat(globalThis.__tsxt__.indent * 4) + `${field.fieldName}: ${field.fieldType};` + "\n");
+        case field.isOneof:
+          {
+            return "" + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
+              const expr = `${field.fieldName}?: ${field.fieldType};`;
+              return Array.isArray(expr) ? expr.join('') : expr;
+            })() + "\n");
+          }
+
+        default:
+          {
+            return "" + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
+              const expr = `${field.fieldName}: ${field.fieldType};`;
+              return Array.isArray(expr) ? expr.join('') : expr;
+            })() + "\n");
+          }
       }
-  }
-}).join("")) + (() => {
-  globalThis.__tsxt__.indent--;
-  return "";
-})())) + (" ".repeat(globalThis.__tsxt__.indent * 4) + `}` + "\n");
+    });
+    return Array.isArray(expr) ? expr.join('') : expr;
+  })()) + (() => {
+    globalThis.__tsxt__.indent--;
+    return "";
+  })();
+
+  return Array.isArray(expr) ? expr.join('') : expr;
+})()) + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
+  const expr = `}`;
+  return Array.isArray(expr) ? expr.join('') : expr;
+})() + "\n");
 
 const renderOneofGroupsArray = groups => {
   let result = [];
@@ -197,21 +288,64 @@ const MessageFieldGetterBody = ({
 
 
   if (isFloatOrDouble && !field.isRepeated && !useDefault) {
-    return "" + (" ".repeat(globalThis.__tsxt__.indent * 4) + `jspb.Message.getOptionalFloatingPointField(` + "\n") + ("" + ("" + ("" + (() => {
-      globalThis.__tsxt__.indent++;
-      return "";
-    })()) + (" ".repeat(globalThis.__tsxt__.indent * 4) + `this,` + "\n") + (" ".repeat(globalThis.__tsxt__.indent * 4) + `${field.fieldNumber}` + "\n") + (() => {
-      globalThis.__tsxt__.indent--;
-      return "";
-    })())) + (" ".repeat(globalThis.__tsxt__.indent * 4) + `)` + "\n");
+    return "" + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
+      const expr = `return jspb.Message.getOptionalFloatingPointField(`;
+      return Array.isArray(expr) ? expr.join('') : expr;
+    })() + "\n") + ("" + (() => {
+      const expr = "" + ("" + (() => {
+        const expr = (() => {
+          globalThis.__tsxt__.indent++;
+          return "";
+        })();
+
+        return Array.isArray(expr) ? expr.join('') : expr;
+      })()) + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
+        const expr = `this,`;
+        return Array.isArray(expr) ? expr.join('') : expr;
+      })() + "\n") + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
+        const expr = `${field.fieldNumber}`;
+        return Array.isArray(expr) ? expr.join('') : expr;
+      })() + "\n") + (() => {
+        globalThis.__tsxt__.indent--;
+        return "";
+      })();
+
+      return Array.isArray(expr) ? expr.join('') : expr;
+    })()) + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
+      const expr = `)`;
+      return Array.isArray(expr) ? expr.join('') : expr;
+    })() + "\n");
   } else {
-    return "" + (" ".repeat(globalThis.__tsxt__.indent * 4) + `jspb.Message.get${cardinality}${type}Field${withDefault}(` + "\n") + ("" + ("" + ("" + (() => {
-      globalThis.__tsxt__.indent++;
-      return "";
-    })()) + (" ".repeat(globalThis.__tsxt__.indent * 4) + `this,` + "\n") + (" ".repeat(globalThis.__tsxt__.indent * 4) + `${field.fieldNumber},` + "\n") + (" ".repeat(globalThis.__tsxt__.indent * 4) + `${defaultArg}` + "\n") + (() => {
-      globalThis.__tsxt__.indent--;
-      return "";
-    })())) + (" ".repeat(globalThis.__tsxt__.indent * 4) + `)` + "\n");
+    return "" + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
+      const expr = `return jspb.Message.get${cardinality}${type}Field${withDefault}(`;
+      return Array.isArray(expr) ? expr.join('') : expr;
+    })() + "\n") + ("" + (() => {
+      const expr = "" + ("" + (() => {
+        const expr = (() => {
+          globalThis.__tsxt__.indent++;
+          return "";
+        })();
+
+        return Array.isArray(expr) ? expr.join('') : expr;
+      })()) + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
+        const expr = `this,`;
+        return Array.isArray(expr) ? expr.join('') : expr;
+      })() + "\n") + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
+        const expr = `${field.fieldNumber},`;
+        return Array.isArray(expr) ? expr.join('') : expr;
+      })() + "\n") + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
+        const expr = `${defaultArg}`;
+        return Array.isArray(expr) ? expr.join('') : expr;
+      })() + "\n") + (() => {
+        globalThis.__tsxt__.indent--;
+        return "";
+      })();
+
+      return Array.isArray(expr) ? expr.join('') : expr;
+    })()) + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
+      const expr = `)`;
+      return Array.isArray(expr) ? expr.join('') : expr;
+    })() + "\n");
   }
 };
 
@@ -220,100 +354,355 @@ const MessageModelTempl = ({
 }) => {
   const repeatedFieldsArray = getRepeatedFieldsArray(message);
   const oneofGroupsArray = getOneofGroupsArray(message);
-  return "" + (" ".repeat(globalThis.__tsxt__.indent * 4) + `export class ${message.modelName} implements ${message.ifaceName} extends jspb.Message {` + "\n") + ("" + ("" + ("" + (() => {
-    globalThis.__tsxt__.indent++;
-    return "";
-  })()) + (" ".repeat(globalThis.__tsxt__.indent * 4) + `private static repeatedFields: number[] = [${repeatedFieldsArray.join(', ')}];` + "\n") + (" ".repeat(globalThis.__tsxt__.indent * 4) + `private static oneofFieldsGroups: number[] = ${renderOneofGroupsArray(oneofGroupsArray)};` + "\n") + (" ".repeat(globalThis.__tsxt__.indent * 4) + "" + "\n") + (" ".repeat(globalThis.__tsxt__.indent * 4) + `contructor(opt_data: any) {` + "\n") + ("" + ("" + ("" + (() => {
-    globalThis.__tsxt__.indent++;
-    return "";
-  })()) + (" ".repeat(globalThis.__tsxt__.indent * 4) + `jspb.Message.initialize(` + "\n") + ("" + ("" + ("" + (() => {
-    globalThis.__tsxt__.indent++;
-    return "";
-  })()) + (" ".repeat(globalThis.__tsxt__.indent * 4) + `this,` + "\n") + (" ".repeat(globalThis.__tsxt__.indent * 4) + `opt_data,` + "\n") + (" ".repeat(globalThis.__tsxt__.indent * 4) + `0,` + "\n") + (" ".repeat(globalThis.__tsxt__.indent * 4) + `${message.pivot},` + "\n") + ("" + (repeatedFieldsArray.length > 0 ? `${message.modelName}.repeatedFields,` : `null,`)) + ("" + (oneofGroupsArray.length > 0 ? `${message.modelName}.oneofFieldsGroups` : `null`)) + (() => {
-    globalThis.__tsxt__.indent--;
-    return "";
-  })())) + (" ".repeat(globalThis.__tsxt__.indent * 4) + `)` + "\n") + (() => {
-    globalThis.__tsxt__.indent--;
-    return "";
-  })())) + (" ".repeat(globalThis.__tsxt__.indent * 4) + `}` + "\n") + (" ".repeat(globalThis.__tsxt__.indent * 4) + "" + "\n") + ("" + message.fields.map(field => {
-    switch (true) {
-      case field.isMap:
-        {
-          return "" + (" ".repeat(globalThis.__tsxt__.indent * 4) + `public get ${field.fieldName}(): jspb.Map<${field.mapType.keyType}, ${field.mapType.valueType}> {` + "\n") + ("" + ("" + ("" + (() => {
-            globalThis.__tsxt__.indent++;
-            return "";
-          })()) + (" ".repeat(globalThis.__tsxt__.indent * 4) + `return jspb.Message.getMapField(` + "\n") + ("" + ("" + ("" + (() => {
-            globalThis.__tsxt__.indent++;
-            return "";
-          })()) + (" ".repeat(globalThis.__tsxt__.indent * 4) + `this,` + "\n") + (" ".repeat(globalThis.__tsxt__.indent * 4) + `${field.fieldNumber},` + "\n") + (" ".repeat(globalThis.__tsxt__.indent * 4) + `false,` + "\n") + ("" + (field.mapType.valueTypeIsMessage ? field.mapType.valueType : 'null')) + (() => {
-            globalThis.__tsxt__.indent--;
-            return "";
-          })())) + (" ".repeat(globalThis.__tsxt__.indent * 4) + `);` + "\n") + (() => {
-            globalThis.__tsxt__.indent--;
-            return "";
-          })())) + (" ".repeat(globalThis.__tsxt__.indent * 4) + `}` + "\n") + (" ".repeat(globalThis.__tsxt__.indent * 4) + "" + "\n");
-        }
+  return "" + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
+    const expr = `export class ${message.modelName} implements ${message.ifaceName} extends jspb.Message {`;
+    return Array.isArray(expr) ? expr.join('') : expr;
+  })() + "\n") + ("" + (() => {
+    const expr = "" + ("" + (() => {
+      const expr = (() => {
+        globalThis.__tsxt__.indent++;
+        return "";
+      })();
 
-      case field.isMessageType:
-        {
-          return "" + (" ".repeat(globalThis.__tsxt__.indent * 4) + `public get ${field.fieldName}(): ${field.fieldType} {` + "\n") + ("" + ("" + ("" + (() => {
-            globalThis.__tsxt__.indent++;
-            return "";
-          })()) + (" ".repeat(globalThis.__tsxt__.indent * 4) + `return jspb.Message.get${field.isRepeated ? 'Repeated' : ''}WrapperField(` + "\n") + ("" + ("" + ("" + (() => {
-            globalThis.__tsxt__.indent++;
-            return "";
-          })()) + (" ".repeat(globalThis.__tsxt__.indent * 4) + `this,` + "\n") + (" ".repeat(globalThis.__tsxt__.indent * 4) + `${field.fieldType},` + "\n") + (" ".repeat(globalThis.__tsxt__.indent * 4) + `${field.fieldNumber}` + "\n") + (() => {
-            globalThis.__tsxt__.indent--;
-            return "";
-          })())) + (" ".repeat(globalThis.__tsxt__.indent * 4) + `);` + "\n") + (() => {
-            globalThis.__tsxt__.indent--;
-            return "";
-          })())) + (" ".repeat(globalThis.__tsxt__.indent * 4) + `}` + "\n") + (" ".repeat(globalThis.__tsxt__.indent * 4) + "" + "\n") + (" ".repeat(globalThis.__tsxt__.indent * 4) + `public set ${field.fieldName}(value: ${field.fieldType}): void {` + "\n") + ("" + ("" + ("" + (() => {
-            globalThis.__tsxt__.indent++;
-            return "";
-          })()) + (" ".repeat(globalThis.__tsxt__.indent * 4) + `return jspb.Message.set${field.isOneof ? 'Oneof' : ''}${field.isRepeated ? 'Repeated' : ''}WrapperField(` + "\n") + ("" + ("" + ("" + (() => {
-            globalThis.__tsxt__.indent++;
-            return "";
-          })()) + (" ".repeat(globalThis.__tsxt__.indent * 4) + `this,` + "\n") + (" ".repeat(globalThis.__tsxt__.indent * 4) + `${field.fieldNumber},` + "\n") + ("" + (field.oneofName ? `${message.modelName}.oneofFieldsGroups[${getOneofGroupsArrayIndex(message, field.oneofName)}],` : '')) + (" ".repeat(globalThis.__tsxt__.indent * 4) + `value` + "\n") + (() => {
-            globalThis.__tsxt__.indent--;
-            return "";
-          })())) + (" ".repeat(globalThis.__tsxt__.indent * 4) + `)` + "\n") + (() => {
-            globalThis.__tsxt__.indent--;
-            return "";
-          })())) + (" ".repeat(globalThis.__tsxt__.indent * 4) + `}` + "\n");
-        }
+      return Array.isArray(expr) ? expr.join('') : expr;
+    })()) + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
+      const expr = `private static repeatedFields: number[] = [${repeatedFieldsArray.join(', ')}];`;
+      return Array.isArray(expr) ? expr.join('') : expr;
+    })() + "\n") + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
+      const expr = `private static oneofFieldsGroups: number[] = ${renderOneofGroupsArray(oneofGroupsArray)};`;
+      return Array.isArray(expr) ? expr.join('') : expr;
+    })() + "\n") + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
+      const expr = "";
+      return Array.isArray(expr) ? expr.join('') : expr;
+    })() + "\n") + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
+      const expr = `contructor(opt_data: any) {`;
+      return Array.isArray(expr) ? expr.join('') : expr;
+    })() + "\n") + ("" + (() => {
+      const expr = "" + ("" + (() => {
+        const expr = (() => {
+          globalThis.__tsxt__.indent++;
+          return "";
+        })();
 
-      default:
-        {
-          return "" + (" ".repeat(globalThis.__tsxt__.indent * 4) + `public get ${field.fieldName}(): ${field.fieldType} {` + "\n") + ("" + ("" + ("" + (() => {
+        return Array.isArray(expr) ? expr.join('') : expr;
+      })()) + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
+        const expr = `jspb.Message.initialize(`;
+        return Array.isArray(expr) ? expr.join('') : expr;
+      })() + "\n") + ("" + (() => {
+        const expr = "" + ("" + (() => {
+          const expr = (() => {
             globalThis.__tsxt__.indent++;
             return "";
-          })()) + ("" + MessageFieldGetterBody({
-            "field": field
-          }, [])) + (() => {
-            globalThis.__tsxt__.indent--;
-            return "";
-          })())) + (" ".repeat(globalThis.__tsxt__.indent * 4) + `}` + "\n") + (" ".repeat(globalThis.__tsxt__.indent * 4) + "" + "\n") + (" ".repeat(globalThis.__tsxt__.indent * 4) + `public set ${field.fieldName}(value: ${field.fieldType}): void {` + "\n") + ("" + ("" + ("" + (() => {
-            globalThis.__tsxt__.indent++;
-            return "";
-          })()) + (" ".repeat(globalThis.__tsxt__.indent * 4) + `return void;` + "\n") + (() => {
-            globalThis.__tsxt__.indent--;
-            return "";
-          })())) + (" ".repeat(globalThis.__tsxt__.indent * 4) + `}` + "\n");
+          })();
+
+          return Array.isArray(expr) ? expr.join('') : expr;
+        })()) + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
+          const expr = `this,`;
+          return Array.isArray(expr) ? expr.join('') : expr;
+        })() + "\n") + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
+          const expr = `opt_data,`;
+          return Array.isArray(expr) ? expr.join('') : expr;
+        })() + "\n") + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
+          const expr = `0,`;
+          return Array.isArray(expr) ? expr.join('') : expr;
+        })() + "\n") + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
+          const expr = `${message.pivot},`;
+          return Array.isArray(expr) ? expr.join('') : expr;
+        })() + "\n") + ("" + (() => {
+          const expr = repeatedFieldsArray.length > 0 ? `${message.modelName}.repeatedFields,` : `null,`;
+          return Array.isArray(expr) ? expr.join('') : expr;
+        })()) + ("" + (() => {
+          const expr = oneofGroupsArray.length > 0 ? `${message.modelName}.oneofFieldsGroups` : `null`;
+          return Array.isArray(expr) ? expr.join('') : expr;
+        })()) + (() => {
+          globalThis.__tsxt__.indent--;
+          return "";
+        })();
+
+        return Array.isArray(expr) ? expr.join('') : expr;
+      })()) + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
+        const expr = `)`;
+        return Array.isArray(expr) ? expr.join('') : expr;
+      })() + "\n") + (() => {
+        globalThis.__tsxt__.indent--;
+        return "";
+      })();
+
+      return Array.isArray(expr) ? expr.join('') : expr;
+    })()) + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
+      const expr = `}`;
+      return Array.isArray(expr) ? expr.join('') : expr;
+    })() + "\n") + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
+      const expr = "";
+      return Array.isArray(expr) ? expr.join('') : expr;
+    })() + "\n") + ("" + (() => {
+      const expr = message.fields.map(field => {
+        switch (true) {
+          case field.isMap:
+            {
+              return "" + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
+                const expr = `public get ${field.fieldName}(): jspb.Map<${field.mapType.keyType}, ${field.mapType.valueType}> {`;
+                return Array.isArray(expr) ? expr.join('') : expr;
+              })() + "\n") + ("" + (() => {
+                const expr = "" + ("" + (() => {
+                  const expr = (() => {
+                    globalThis.__tsxt__.indent++;
+                    return "";
+                  })();
+
+                  return Array.isArray(expr) ? expr.join('') : expr;
+                })()) + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
+                  const expr = `return jspb.Message.getMapField(`;
+                  return Array.isArray(expr) ? expr.join('') : expr;
+                })() + "\n") + ("" + (() => {
+                  const expr = "" + ("" + (() => {
+                    const expr = (() => {
+                      globalThis.__tsxt__.indent++;
+                      return "";
+                    })();
+
+                    return Array.isArray(expr) ? expr.join('') : expr;
+                  })()) + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
+                    const expr = `this,`;
+                    return Array.isArray(expr) ? expr.join('') : expr;
+                  })() + "\n") + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
+                    const expr = `${field.fieldNumber},`;
+                    return Array.isArray(expr) ? expr.join('') : expr;
+                  })() + "\n") + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
+                    const expr = `false,`;
+                    return Array.isArray(expr) ? expr.join('') : expr;
+                  })() + "\n") + ("" + (() => {
+                    const expr = field.mapType.valueTypeIsMessage ? field.mapType.valueType : 'null';
+                    return Array.isArray(expr) ? expr.join('') : expr;
+                  })()) + (() => {
+                    globalThis.__tsxt__.indent--;
+                    return "";
+                  })();
+
+                  return Array.isArray(expr) ? expr.join('') : expr;
+                })()) + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
+                  const expr = `);`;
+                  return Array.isArray(expr) ? expr.join('') : expr;
+                })() + "\n") + (() => {
+                  globalThis.__tsxt__.indent--;
+                  return "";
+                })();
+
+                return Array.isArray(expr) ? expr.join('') : expr;
+              })()) + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
+                const expr = `}`;
+                return Array.isArray(expr) ? expr.join('') : expr;
+              })() + "\n") + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
+                const expr = "";
+                return Array.isArray(expr) ? expr.join('') : expr;
+              })() + "\n");
+            }
+
+          case field.isMessageType:
+            {
+              return "" + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
+                const expr = `public get ${field.fieldName}(): ${field.fieldType} {`;
+                return Array.isArray(expr) ? expr.join('') : expr;
+              })() + "\n") + ("" + (() => {
+                const expr = "" + ("" + (() => {
+                  const expr = (() => {
+                    globalThis.__tsxt__.indent++;
+                    return "";
+                  })();
+
+                  return Array.isArray(expr) ? expr.join('') : expr;
+                })()) + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
+                  const expr = `return jspb.Message.get${field.isRepeated ? 'Repeated' : ''}WrapperField(`;
+                  return Array.isArray(expr) ? expr.join('') : expr;
+                })() + "\n") + ("" + (() => {
+                  const expr = "" + ("" + (() => {
+                    const expr = (() => {
+                      globalThis.__tsxt__.indent++;
+                      return "";
+                    })();
+
+                    return Array.isArray(expr) ? expr.join('') : expr;
+                  })()) + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
+                    const expr = `this,`;
+                    return Array.isArray(expr) ? expr.join('') : expr;
+                  })() + "\n") + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
+                    const expr = `${field.fieldType},`;
+                    return Array.isArray(expr) ? expr.join('') : expr;
+                  })() + "\n") + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
+                    const expr = `${field.fieldNumber}`;
+                    return Array.isArray(expr) ? expr.join('') : expr;
+                  })() + "\n") + (() => {
+                    globalThis.__tsxt__.indent--;
+                    return "";
+                  })();
+
+                  return Array.isArray(expr) ? expr.join('') : expr;
+                })()) + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
+                  const expr = `);`;
+                  return Array.isArray(expr) ? expr.join('') : expr;
+                })() + "\n") + (() => {
+                  globalThis.__tsxt__.indent--;
+                  return "";
+                })();
+
+                return Array.isArray(expr) ? expr.join('') : expr;
+              })()) + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
+                const expr = `}`;
+                return Array.isArray(expr) ? expr.join('') : expr;
+              })() + "\n") + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
+                const expr = "";
+                return Array.isArray(expr) ? expr.join('') : expr;
+              })() + "\n") + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
+                const expr = `public set ${field.fieldName}(value: ${field.fieldType}): void {`;
+                return Array.isArray(expr) ? expr.join('') : expr;
+              })() + "\n") + ("" + (() => {
+                const expr = "" + ("" + (() => {
+                  const expr = (() => {
+                    globalThis.__tsxt__.indent++;
+                    return "";
+                  })();
+
+                  return Array.isArray(expr) ? expr.join('') : expr;
+                })()) + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
+                  const expr = `return jspb.Message.set${field.isOneof ? 'Oneof' : ''}${field.isRepeated ? 'Repeated' : ''}WrapperField(`;
+                  return Array.isArray(expr) ? expr.join('') : expr;
+                })() + "\n") + ("" + (() => {
+                  const expr = "" + ("" + (() => {
+                    const expr = (() => {
+                      globalThis.__tsxt__.indent++;
+                      return "";
+                    })();
+
+                    return Array.isArray(expr) ? expr.join('') : expr;
+                  })()) + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
+                    const expr = `this,`;
+                    return Array.isArray(expr) ? expr.join('') : expr;
+                  })() + "\n") + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
+                    const expr = `${field.fieldNumber},`;
+                    return Array.isArray(expr) ? expr.join('') : expr;
+                  })() + "\n") + ("" + (() => {
+                    const expr = field.oneofName ? `${message.modelName}.oneofFieldsGroups[${getOneofGroupsArrayIndex(message, field.oneofName)}],` : '';
+                    return Array.isArray(expr) ? expr.join('') : expr;
+                  })()) + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
+                    const expr = `value`;
+                    return Array.isArray(expr) ? expr.join('') : expr;
+                  })() + "\n") + (() => {
+                    globalThis.__tsxt__.indent--;
+                    return "";
+                  })();
+
+                  return Array.isArray(expr) ? expr.join('') : expr;
+                })()) + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
+                  const expr = `)`;
+                  return Array.isArray(expr) ? expr.join('') : expr;
+                })() + "\n") + (() => {
+                  globalThis.__tsxt__.indent--;
+                  return "";
+                })();
+
+                return Array.isArray(expr) ? expr.join('') : expr;
+              })()) + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
+                const expr = `}`;
+                return Array.isArray(expr) ? expr.join('') : expr;
+              })() + "\n");
+            }
+
+          default:
+            {
+              return "" + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
+                const expr = `public get ${field.fieldName}(): ${field.fieldType} {`;
+                return Array.isArray(expr) ? expr.join('') : expr;
+              })() + "\n") + ("" + (() => {
+                const expr = "" + ("" + (() => {
+                  const expr = (() => {
+                    globalThis.__tsxt__.indent++;
+                    return "";
+                  })();
+
+                  return Array.isArray(expr) ? expr.join('') : expr;
+                })()) + ("" + (() => {
+                  const expr = MessageFieldGetterBody({
+                    "field": field
+                  }, []);
+                  return Array.isArray(expr) ? expr.join('') : expr;
+                })()) + (() => {
+                  globalThis.__tsxt__.indent--;
+                  return "";
+                })();
+
+                return Array.isArray(expr) ? expr.join('') : expr;
+              })()) + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
+                const expr = `}`;
+                return Array.isArray(expr) ? expr.join('') : expr;
+              })() + "\n") + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
+                const expr = "";
+                return Array.isArray(expr) ? expr.join('') : expr;
+              })() + "\n") + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
+                const expr = `public set ${field.fieldName}(value: ${field.fieldType}): void {`;
+                return Array.isArray(expr) ? expr.join('') : expr;
+              })() + "\n") + ("" + (() => {
+                const expr = "" + ("" + (() => {
+                  const expr = (() => {
+                    globalThis.__tsxt__.indent++;
+                    return "";
+                  })();
+
+                  return Array.isArray(expr) ? expr.join('') : expr;
+                })()) + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
+                  const expr = `return void;`;
+                  return Array.isArray(expr) ? expr.join('') : expr;
+                })() + "\n") + (() => {
+                  globalThis.__tsxt__.indent--;
+                  return "";
+                })();
+
+                return Array.isArray(expr) ? expr.join('') : expr;
+              })()) + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
+                const expr = `}`;
+                return Array.isArray(expr) ? expr.join('') : expr;
+              })() + "\n");
+            }
         }
-    }
-  }).join("")) + (() => {
-    globalThis.__tsxt__.indent--;
-    return "";
-  })())) + (" ".repeat(globalThis.__tsxt__.indent * 4) + `}` + "\n");
+      });
+      return Array.isArray(expr) ? expr.join('') : expr;
+    })()) + (() => {
+      globalThis.__tsxt__.indent--;
+      return "";
+    })();
+
+    return Array.isArray(expr) ? expr.join('') : expr;
+  })()) + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
+    const expr = `}`;
+    return Array.isArray(expr) ? expr.join('') : expr;
+  })() + "\n");
 };
 
 const EnumTempl = ({
   enm
-}) => "" + (" ".repeat(globalThis.__tsxt__.indent * 4) + `export enum ${enm.name} {` + "\n") + ("" + ("" + ("" + (() => {
-  globalThis.__tsxt__.indent++;
-  return "";
-})()) + ("" + enm.fields.map(field => "" + (" ".repeat(globalThis.__tsxt__.indent * 4) + `${field.fieldName} = ${field.fieldValue},` + "\n")).join("")) + (() => {
-  globalThis.__tsxt__.indent--;
-  return "";
-})())) + (" ".repeat(globalThis.__tsxt__.indent * 4) + `}` + "\n");
+}) => "" + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
+  const expr = `export enum ${enm.name} {`;
+  return Array.isArray(expr) ? expr.join('') : expr;
+})() + "\n") + ("" + (() => {
+  const expr = "" + ("" + (() => {
+    const expr = (() => {
+      globalThis.__tsxt__.indent++;
+      return "";
+    })();
+
+    return Array.isArray(expr) ? expr.join('') : expr;
+  })()) + ("" + (() => {
+    const expr = enm.fields.map(field => "" + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
+      const expr = `${field.fieldName} = ${field.fieldValue},`;
+      return Array.isArray(expr) ? expr.join('') : expr;
+    })() + "\n"));
+    return Array.isArray(expr) ? expr.join('') : expr;
+  })()) + (() => {
+    globalThis.__tsxt__.indent--;
+    return "";
+  })();
+
+  return Array.isArray(expr) ? expr.join('') : expr;
+})()) + (" ".repeat(globalThis.__tsxt__.indent * 4) + (() => {
+  const expr = `}`;
+  return Array.isArray(expr) ? expr.join('') : expr;
+})() + "\n");
