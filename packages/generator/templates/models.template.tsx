@@ -215,7 +215,6 @@ const MessageFieldGetterBody = ({ field }: { field: MessageField }) => {
       </templ>
     )
   } else {
-
     return (
       <templ>
         {`return jspb.Message.get${cardinality}${type}Field${withDefault}(`}
@@ -238,8 +237,8 @@ const MessageModelTempl = ({ message }: { message: Message }) => {
     <templ>
       {`export class ${message.modelName} implements ${message.ifaceName} extends jspb.Message {`}
       <indent>
-        {`private static repeatedFields: number[] = [${repeatedFieldsArray.join(', ')}];`}
-        {`private static oneofFieldsGroups: number[] = ${renderOneofGroupsArray(oneofGroupsArray)};`}
+        {repeatedFieldsArray.length > 0 ? `private static repeatedFields: number[] = [${repeatedFieldsArray.join(', ')}];` : null}
+        {oneofGroupsArray.length > 0 ? `private static oneofFieldsGroups: number[] = ${renderOneofGroupsArray(oneofGroupsArray)};` : null}
         <ln/>
         {`contructor(opt_data: any) {`}
         <indent>
@@ -249,8 +248,8 @@ const MessageModelTempl = ({ message }: { message: Message }) => {
             {`opt_data,`}
             {`0,`}
             {`${message.pivot},`}
-            {repeatedFieldsArray.length > 0 ? `${message.modelName}.repeatedFields,` : `null,`}
-            {oneofGroupsArray.length > 0 ? `${message.modelName}.oneofFieldsGroups` : `null`}
+            {`${repeatedFieldsArray.length > 0 ? `${message.modelName}.repeatedFields,` : `null,`}`}
+            {`${oneofGroupsArray.length > 0 ? `${message.modelName}.oneofFieldsGroups` : `null`}`}
           </indent>
           {`)`}
         </indent>
@@ -310,7 +309,6 @@ const MessageModelTempl = ({ message }: { message: Message }) => {
             }
 
             default: {
-
               return (
                 <templ>
                   {`public get ${field.fieldName}(): ${field.fieldType} {`}

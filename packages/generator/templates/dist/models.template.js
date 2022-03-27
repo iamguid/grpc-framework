@@ -293,7 +293,13 @@ const MessageModelTempl = ({
       })();
 
       return Array.isArray(expr) ? expr.join('') : expr;
-    })() + (" ".repeat(globalThis.__tsxt__.indent * 4) + `private static repeatedFields: number[] = [${repeatedFieldsArray.join(', ')}];` + "\n") + (" ".repeat(globalThis.__tsxt__.indent * 4) + `private static oneofFieldsGroups: number[] = ${renderOneofGroupsArray(oneofGroupsArray)};` + "\n") + (" ".repeat(globalThis.__tsxt__.indent * 4) + "" + "\n") + (" ".repeat(globalThis.__tsxt__.indent * 4) + `contructor(opt_data: any) {` + "\n") + (() => {
+    })() + (() => {
+      const expr = repeatedFieldsArray.length > 0 ? `private static repeatedFields: number[] = [${repeatedFieldsArray.join(', ')}];` : null;
+      return Array.isArray(expr) ? expr.join('') : expr;
+    })() + (() => {
+      const expr = oneofGroupsArray.length > 0 ? `private static oneofFieldsGroups: number[] = ${renderOneofGroupsArray(oneofGroupsArray)};` : null;
+      return Array.isArray(expr) ? expr.join('') : expr;
+    })() + (" ".repeat(globalThis.__tsxt__.indent * 4) + "" + "\n") + (" ".repeat(globalThis.__tsxt__.indent * 4) + `contructor(opt_data: any) {` + "\n") + (() => {
       const expr = "" + (() => {
         const expr = (() => {
           globalThis.__tsxt__.indent++;
@@ -309,13 +315,7 @@ const MessageModelTempl = ({
           })();
 
           return Array.isArray(expr) ? expr.join('') : expr;
-        })() + (" ".repeat(globalThis.__tsxt__.indent * 4) + `this,` + "\n") + (" ".repeat(globalThis.__tsxt__.indent * 4) + `opt_data,` + "\n") + (" ".repeat(globalThis.__tsxt__.indent * 4) + `0,` + "\n") + (" ".repeat(globalThis.__tsxt__.indent * 4) + `${message.pivot},` + "\n") + (() => {
-          const expr = repeatedFieldsArray.length > 0 ? `${message.modelName}.repeatedFields,` : `null,`;
-          return Array.isArray(expr) ? expr.join('') : expr;
-        })() + (() => {
-          const expr = oneofGroupsArray.length > 0 ? `${message.modelName}.oneofFieldsGroups` : `null`;
-          return Array.isArray(expr) ? expr.join('') : expr;
-        })() + (() => {
+        })() + (" ".repeat(globalThis.__tsxt__.indent * 4) + `this,` + "\n") + (" ".repeat(globalThis.__tsxt__.indent * 4) + `opt_data,` + "\n") + (" ".repeat(globalThis.__tsxt__.indent * 4) + `0,` + "\n") + (" ".repeat(globalThis.__tsxt__.indent * 4) + `${message.pivot},` + "\n") + (" ".repeat(globalThis.__tsxt__.indent * 4) + `${repeatedFieldsArray.length > 0 ? `${message.modelName}.repeatedFields,` : `null,`}` + "\n") + (" ".repeat(globalThis.__tsxt__.indent * 4) + `${oneofGroupsArray.length > 0 ? `${message.modelName}.oneofFieldsGroups` : `null`}` + "\n") + (() => {
           globalThis.__tsxt__.indent--;
           return "";
         })();
